@@ -1,4 +1,7 @@
-# Django settings for bace project.
+#-*- coding: utf-8 -*-
+# Django settings for generico_final project.
+import os.path
+
 
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
@@ -27,7 +30,7 @@ DATABASES = {
 # timezone as the operating system.
 # If running in a Windows environment this must be set to the same as your
 # system time zone.
-TIME_ZONE = 'America/Chicago'
+TIME_ZONE = 'America/Sao_Paulo'
 
 # Language code for this installation. All choices can be found here:
 # http://www.i18nguy.com/unicode/language-identifiers.html
@@ -99,7 +102,8 @@ MIDDLEWARE_CLASSES = (
 
 ROOT_URLCONF = 'bace.urls'
 
-TEMPLATE_DIRS = (
+TEMPLATE_DIRS = (         
+	os.path.dirname(__file__) + '/templates/'
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
@@ -116,8 +120,11 @@ INSTALLED_APPS = (
     'django.contrib.admin',
     # Uncomment the next line to enable admin documentation:
     # 'django.contrib.admindocs',                 
-		'automacao'
+		'modulos.automacao'
 )
+
+GRAPPELLI_ADMIN_TITLE = "BACE"
+
 
 # A sample logging configuration. The only tangible logging
 # performed by this configuration is to send an email to
