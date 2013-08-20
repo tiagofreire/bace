@@ -13,9 +13,9 @@ class NotaFiscalAdmin(admin.ModelAdmin):
   search_fields = ['numero',]
 	                            
 class OrdemFabricacaoAdmin(admin.ModelAdmin):
-	list_display=('nota_fiscal','operador','produto','peso_bruto','bitola','previsao')
+	list_display=('nota_fiscal','operador','peso_bruto','bitola','previsao')
 	list_per_page = 25
-	search_fields = ['nota_fiscal','operador','produto','peso_bruto','bitola','previsao']
+	search_fields = ['nota_fiscal','operador','peso_bruto','bitola','previsao']
 admin.site.register(Material,MaterialAdmin)
 admin.site.register(NotaFiscal,NotaFiscalAdmin)                                       
 admin.site.register(OrdemFabricacao,OrdemFabricacaoAdmin)                                       
