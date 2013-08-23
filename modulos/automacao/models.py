@@ -28,6 +28,20 @@ class Operador(models.Model):
     def __unicode__(self):
         return "%s" % self.nome
 
+class TipoMaterial(models.Model):
+  descricao = models.CharField(u"Descrição",max_length=200, blank=False, null=False)
+
+  class Meta:
+    verbose_name = "Tipo de Material"
+    verbose_name_plural  = "Tipo de Materiais"
+
+    def __str__(self):
+      return "%s" % self.descricao
+
+    def __unicode__(self):
+        return "%s" % self.descricao 
+
+
 class Material(models.Model):
   descricao = models.CharField(u"Descrição",max_length=200, blank=False, null=False)
   
@@ -70,12 +84,13 @@ class NotaFiscal(models.Model):
         return "%s" % self.numero
                                              
 class OrdemFabricacao(models.Model):
-  nota_fiscal = models.ForeignKey(NotaFiscal, blank = False, null = False)
-  operador = models.ForeignKey(Operador, blank=False, null=False)
-  #produto = models.ForeignKey("Produto",Produto, blank=False, null=False)
-  peso_bruto = models.CharField("Peso Bruto",max_length=10,blank=False, null=False)
-  bitola = models.CharField("Bitola",max_length=10,blank=False, null=False)
-  previsao = models.CharField(u"Previsão",max_length=10,blank=False, null=False)   
+  nota_fiscal = models.ForeignKey(NotaFiscal, blank = False, null = False)  
+  data = models.DateTimeField(u"Data", auto_now_add = True, null = True, blank = True)
+  tipo_material = models.ForeignKey(TipoMaterial, blank=False, null=False)         
+  produto = models.ForeignKey(Produto, blank=False, null=False)         
+  operador = models.ForeignKey(Operador, blank=True, null=True)
+  peso_bruto = models.CharField("Peso Bruto",max_length=10,blank=True, null=True)
+  previsao = models.CharField(u"Previsão",max_length=10,blank=True, null=True)
   
   class Meta:
     verbose_name = u"Ordem de Fabricação"
