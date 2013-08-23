@@ -9,24 +9,24 @@ class Setor(models.Model):
   class Meta:
     verbose_name = "Setor"
     verbose_name_plural  = "Setores"
-    def __str__(self):
-      return "%s" % self.descricao
-    
-    def __unicode__(self):
-        return "%s" % self.descricao
+  def __str__(self):
+    return "%s" % self.descricao
+  
+  def __unicode__(self):
+      return "%s" % self.descricao 
 
 class Operador(models.Model):
   nome = models.CharField("Nome",max_length=200, blank=False, null=False)
-  setor = models.ForeignKey(Setor, blank=False, null=False)
+  setor = models.ForeignKey(Setor, related_name = "setor_descricao", blank=False, null=False)
     
   class Meta:
     verbose_name = "Operador"
     verbose_name_plural  = "Operadores"
-    def __str__(self):
-      return "%s" % self.nome
-    
-    def __unicode__(self):
-        return "%s" % self.nome
+  def __str__(self):
+    return "%s" % self.nome
+  
+  def __unicode__(self):
+      return "%s" % self.nome  
 
 class TipoMaterial(models.Model):
   descricao = models.CharField(u"Descrição",max_length=200, blank=False, null=False)
@@ -35,11 +35,11 @@ class TipoMaterial(models.Model):
     verbose_name = "Tipo de Material"
     verbose_name_plural  = "Tipo de Materiais"
 
-    def __str__(self):
-      return "%s" % self.descricao
+  def __str__(self):
+    return "%s" % self.descricao
 
-    def __unicode__(self):
-        return "%s" % self.descricao 
+  def __unicode__(self):
+      return "%s" % self.descricao 
 
 
 class Material(models.Model):
@@ -49,11 +49,11 @@ class Material(models.Model):
     verbose_name = "Material"
     verbose_name_plural  = "Materiais"
     
-    def __str__(self):
-      return "%s" % self.descricao
-    
-    def __unicode__(self):
-        return "%s" % self.descricao 
+  def __str__(self):
+    return "%s" % self.descricao
+  
+  def __unicode__(self):
+      return "%s" % self.descricao 
 
 class Produto(models.Model):
   descricao = models.CharField(u"Descrição",max_length=200, blank=False, null=False)
@@ -62,29 +62,29 @@ class Produto(models.Model):
     verbose_name = "Produto"
     verbose_name_plural  = "Produtos"
 
-    def __str__(self):
-      return "%s" % self.descricao
+  def __str__(self):
+    return "%s" % self.descricao
 
-    def __unicode__(self):
-        return "%s" % self.descricao
+  def __unicode__(self):
+      return "%s" % self.descricao  
 
 class NotaFiscal(models.Model):
   numero = models.CharField(u"Número",max_length = 20, blank = False, null = False)  
-  material = models.ManyToManyField(Material, blank=False,related_name="automacao_material",null=False,help_text = u"Selecione o material ou lista de materiais.")
+  material = models.ManyToManyField(Material, blank=False,related_name="material_descricao",null=False,help_text = u"Selecione o material ou lista de materiais.")
   peso = models.CharField(u"Peso",max_length = 10, blank = False, null = False)
 
   class Meta:
     verbose_name = "Nota Fiscal"
     verbose_name_plural  = "Notas Fiscais"
 
-    def __str__(self):
-      return "%s" % self.numero
+  def __str__(self):
+    return "%s" % self.numero
 
-    def __unicode__(self):
-        return "%s" % self.numero
+  def __unicode__(self):
+      return "%s" % self.numero 
                                              
 class OrdemFabricacao(models.Model):
-  nota_fiscal = models.ForeignKey(NotaFiscal, blank = False, null = False)  
+  nota_fiscal = models.ForeignKey(NotaFiscal, blank = False, null = False, related_name = "ordemfabricacao_notafiscal")
   data = models.DateField(u"Data", null = True, blank = True)
   tipo_material = models.ForeignKey(TipoMaterial, blank=False, null=False)         
   produto = models.ForeignKey(Produto, blank=False, null=False)         
@@ -96,7 +96,8 @@ class OrdemFabricacao(models.Model):
     verbose_name = u"Ordem de Fabricação"
     verbose_name_plural  = u"Ordens de Fabricação"
 
-    def __str__(self):
-      return "%s" % NotaFiscal.numero
-    def __unicode__(self):
-      return "%s" % NotaFiscal.numero
+
+  def __str__(self):
+    return "%s" % self.nota_fiscal
+  def __unicode__(self):
+    return "%s" % self.nota_fiscal     
