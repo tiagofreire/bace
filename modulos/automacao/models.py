@@ -5,7 +5,7 @@ from django.db import models
 from django.db.models import signals
   
 class Setor(models.Model):
-  descrica = models.CharField(u"Descrição",max_length=200, blank=False, null=False)
+  descricao = models.CharField(u"Descrição",max_length=200, blank=False, null=False)
   class Meta:
     verbose_name = "Setor"
     verbose_name_plural  = "Setores"
@@ -85,7 +85,7 @@ class NotaFiscal(models.Model):
                                              
 class OrdemFabricacao(models.Model):
   nota_fiscal = models.ForeignKey(NotaFiscal, blank = False, null = False)  
-  data = models.DateTimeField(u"Data", auto_now_add = True, null = True, blank = True)
+  data = models.DateField(u"Data", null = True, blank = True)
   tipo_material = models.ForeignKey(TipoMaterial, blank=False, null=False)         
   produto = models.ForeignKey(Produto, blank=False, null=False)         
   operador = models.ForeignKey(Operador, blank=True, null=True)
