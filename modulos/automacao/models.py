@@ -76,11 +76,11 @@ class NotaFiscal(models.Model):
     verbose_name_plural = "Notas Fiscais"
     
   numero = models.CharField(u"Número", max_length=100,blank=False,null=False, unique=True)
-  valor_total = models.CharField(u"Valor Total", max_length=100,blank=False,null=False)
+  valor_total = models.DecimalField(u"Valor Total", max_digits=8,decimal_places=2,blank=False,null=False)
   
   def __unicode__(self):
     return self.numero
-
+  
 class MaterialNotaFiscal(models.Model):
   class Meta:
     verbose_name = "Material"
@@ -90,8 +90,13 @@ class MaterialNotaFiscal(models.Model):
   material = models.ForeignKey(Material,blank=False,null=False)
   volume = models.CharField(u"Volume", max_length=100,blank=False,null=False, unique=True)
   data_entrada = models.DateField(u"Data de Entrada", max_length=100,blank=False,null=False, unique=True)
-  peso = models.CharField(u"Peso", max_length=100,blank=False,null=False, unique=True)
-  valor = models.CharField(u"Valor", max_length=100,blank=False,null=False, unique=True)
+  peso = models.DecimalField(u"Peso", max_length=100,max_digits=8,decimal_places=2,blank=False,null=False, unique=True)
+  valor = models.DecimalField(u"Valor", max_digits=8,decimal_places=2,blank=False,null=False, unique=True)
   
   def __unicode__(self):
     return self.material.descricao
+
+#===================================== Signals ====================================================================================
+def post_delete_filme(signal, instance, sender, **kwargs):
+	print "deu certo!"
+signals.pre_save.connect(post_delete_filme, sender = NotaFiscal)
