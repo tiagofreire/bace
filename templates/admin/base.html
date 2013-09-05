@@ -18,6 +18,8 @@
 <script type="text/javascript">
     window.__admin_media_prefix__ = "{% filter escapejs %}{% static "admin/" %}{% endfilter %}";
 </script>
+<script type="text/javascript" src="{% static "admin/js/jquery.min.js" %}"></script>
+<script type="text/javascript" src="{% static "admin/js/jquery.maskMoney.js" %}"></script>
 
 {% block extrahead %}{% endblock %}
 
@@ -127,12 +129,17 @@
     {% block footer %}<div id="footer"></div>{% endblock %}
 </div>
 <!-- END Container -->
+
 {% block js_footer_commons %}
     <script>window.django || document.write('<script src="{% static "admin/js/jquery.js" %}">\x3C/script><script src="{% static "admin/js/jquery.init.js" %}">\x3C/script>')</script>
-    <script type="text/javascript" src="{% static "admin/js/bootstrap.min.js" %}"></script>
+		<script type="text/javascript" src="{% static "admin/js/bootstrap.min.js" %}"></script>
     <script type="text/javascript" src="{% static "admin/js/commons.js" %}"></script>
+		<script type="text/javascript" src="{% static "admin/js/" %}{{opts}}.js"></script>
+		
+		
 {% endblock js_footer_commons %}
 
 {% block js_footer %}{% endblock js_footer %}
+
 </body>
 </html>

@@ -69,18 +69,19 @@ class Produto(models.Model):
   
   def __unicode__(self):
     return self.codigo
-    
 class NotaFiscal(models.Model):
   class Meta:
     verbose_name = "Nota Fiscal"
     verbose_name_plural = "Notas Fiscais"
     
   numero = models.CharField(u"Número", max_length=100,blank=False,null=False, unique=True)
-  valor_total = models.DecimalField(u"Valor Total", max_digits=8,decimal_places=2,blank=False,null=False)
+  valor_total = models.DecimalField(u"Valor Total", max_digits=8,decimal_places=2)
   
   def __unicode__(self):
     return self.numero
-  
+  # def save(self, *args, **kwargs):
+  #   nota_material = MaterialNotaFiscal.objects.filter(nota_fiscal=self.numero)
+  #   print nota_material                                                       
 class MaterialNotaFiscal(models.Model):
   class Meta:
     verbose_name = "Material"
@@ -97,6 +98,6 @@ class MaterialNotaFiscal(models.Model):
     return self.material.descricao
 
 #===================================== Signals ====================================================================================
-def post_delete_filme(signal, instance, sender, **kwargs):
-	print "deu certo!"
-signals.pre_save.connect(post_delete_filme, sender = NotaFiscal)
+# def pre_save_notafiscal(signal, instance, sender, **kwargs):
+#   
+# signals.pre_save.connect(pre_save_notafiscal, sender = NotaFiscal)

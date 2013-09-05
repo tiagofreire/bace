@@ -31,7 +31,8 @@
     display: block;
     margin: 5px;
     line-height: 35px;
-}
+}        
+.vDateField { width: 80px !important; }
 /* advanced options */
 .collapse{
     height: auto;
