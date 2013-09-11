@@ -3,6 +3,7 @@ from django.contrib import admin
 from django.conf import settings 
 from django.contrib.admin.options import ModelAdmin,TabularInline
 from models import *
+from django import forms
 import os
 
 class MaterialAdmin(admin.ModelAdmin):
@@ -31,20 +32,25 @@ class ProdutoAdmin(admin.ModelAdmin):
   search_fields = ['descricao']
 
 class InlineNotaFiscal(TabularInline):
-	model = MaterialNotaFiscal     
+	model = MaterialNotaFiscal  
+	fields = ('nota_fiscal','material','volume','data_entrada','peso','valor',)   
 	extra = 1
 	
-class NotaFiscalAdmin(ModelAdmin):
+class NotaFiscalAdmin(admin.ModelAdmin):
+	class Media:
+		js = ('admin/js/automacao.notafiscal.js',)
+		
 	inlines = [InlineNotaFiscal]   
 	search_fields = ('numero',)    
-	change_form_template = "admin/modulos/automacao/change_form.html"
 
-class MaterialNotaFiscalAdmin(ModelAdmin):
-	exclude = ('status',)    
+class MaterialNotaFiscalAdmin(admin.ModelAdmin):
 	
-class OrdemFabricacaoAdmin(ModelAdmin):
-	change_form_template = "admin/modulos/automacao/add_ordem_fabricacao.html"
-	
+	exclude = ('status',)
+
+class OrdemFabricacaoAdmin(admin.ModelAdmin):                   
+	fields = ('numero_of',)
+	#change_form_template = "admin/modulos/automacao/add_ordem_fabricacao.html"
+
 admin.site.register(TipoMaterial,TipoMaterialAdmin)
 admin.site.register(Material,MaterialAdmin)
 admin.site.register(Setor,SetorAdmin)
@@ -54,3 +60,4 @@ admin.site.register(Produto,ProdutoAdmin)
 admin.site.register(MaterialNotaFiscal,MaterialNotaFiscalAdmin)
 admin.site.register(NotaFiscal, NotaFiscalAdmin)
 admin.site.register(OrdemFabricacao, OrdemFabricacaoAdmin)
+## edur2cot@gmail.com

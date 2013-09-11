@@ -97,13 +97,4 @@
 
     </form>
 </div>
-<script type="text/javascript">
-  jQuery(function(){
-		jQuery(".field-valor input, #id_valor_total, .field-peso input").maskMoney({decimal:".",thousands:"", precision:2})
-		jQuery(".add-row a").live("click",function(){
-			jQuery(".field-valor input, #id_valor_total, .field-peso input").maskMoney({decimal:".",thousands:"", precision:2});
-		})
-		
-  })
-</script>
 {% endblock %}

@@ -23,8 +23,11 @@ var NotaFiscal = {
 			});
 			jQuery("#id_valor_total").val(NotaFiscal.somaValoresArray(vv));    
 		},500);
-		
-		
+		    
+		jQuery(".field-valor input, #id_valor_total, .field-peso input").maskMoney({decimal:".",thousands:"", precision:2})
+		jQuery(".add-row a").live("click",function(){
+			jQuery(".field-valor input, #id_valor_total, .field-peso input").maskMoney({decimal:".",thousands:"", precision:2});
+		})
 	}   
 };
 
