@@ -39,11 +39,18 @@ class NotaFiscalAdmin(ModelAdmin):
 	search_fields = ('numero',)    
 	change_form_template = "admin/modulos/automacao/change_form.html"
 
+class MaterialNotaFiscalAdmin(ModelAdmin):
+	exclude = ('status',)    
+	
+class OrdemFabricacaoAdmin(ModelAdmin):
+	change_form_template = "admin/modulos/automacao/add_ordem_fabricacao.html"
+	
 admin.site.register(TipoMaterial,TipoMaterialAdmin)
 admin.site.register(Material,MaterialAdmin)
 admin.site.register(Setor,SetorAdmin)
 admin.site.register(Operador,OperadorAdmin)
 admin.site.register(GrupoProduto)
 admin.site.register(Produto,ProdutoAdmin)
-admin.site.register(MaterialNotaFiscal)
+admin.site.register(MaterialNotaFiscal,MaterialNotaFiscalAdmin)
 admin.site.register(NotaFiscal, NotaFiscalAdmin)
+admin.site.register(OrdemFabricacao, OrdemFabricacaoAdmin)
