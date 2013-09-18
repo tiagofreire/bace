@@ -3,6 +3,7 @@ from django.contrib import admin
 from django.conf import settings 
 from django.contrib.admin.options import ModelAdmin,TabularInline
 from models import *
+from forms import *
 from django import forms
 import os
 
@@ -44,12 +45,15 @@ class NotaFiscalAdmin(admin.ModelAdmin):
 	search_fields = ('numero',)    
 
 class MaterialNotaFiscalAdmin(admin.ModelAdmin):
-	
 	exclude = ('status',)
 
-class OrdemFabricacaoAdmin(admin.ModelAdmin):                   
-	fields = ('numero_of',)
-	#change_form_template = "admin/modulos/automacao/add_ordem_fabricacao.html"
+
+class AddOrdemFabricacao(forms.Form):
+	nome = forms.CharField("Nome do cara")
+	
+class OrdemFabricacaoAdmin(admin.ModelAdmin):
+	pass#form = AddOrdemFabricacao
+	change_form_template = "admin/modulos/automacao/add_ordem_fabricacao.html"
 
 admin.site.register(TipoMaterial,TipoMaterialAdmin)
 admin.site.register(Material,MaterialAdmin)
@@ -57,7 +61,6 @@ admin.site.register(Setor,SetorAdmin)
 admin.site.register(Operador,OperadorAdmin)
 admin.site.register(GrupoProduto)
 admin.site.register(Produto,ProdutoAdmin)
-admin.site.register(MaterialNotaFiscal,MaterialNotaFiscalAdmin)
+#admin.site.register(MaterialNotaFiscal,MaterialNotaFiscalAdmin)
 admin.site.register(NotaFiscal, NotaFiscalAdmin)
 admin.site.register(OrdemFabricacao, OrdemFabricacaoAdmin)
-## edur2cot@gmail.com

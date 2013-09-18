@@ -2,5 +2,5 @@
 from django.conf.urls.defaults import *
 
 urlpatterns = patterns("modulos.automacao.views",                       
-    (r'admin/automacao/ordemfabricacao/add/', 'add_ordem_fabricacao'),    
+		(r'add/pesquisa_nota_fiscal', 'pesquisa_nota_fiscal'),    
 )
