@@ -11,6 +11,9 @@
     {{ block.super }}
     <link rel="stylesheet" type="text/css" href="{% static "admin/css/forms-and-widgets.css" %}" />
     <link rel="stylesheet" type="text/css" href="{% static "admin/css/change-form.css" %}" />
+<style>
+
+</style>
 {% endblock %}
 
 {% block coltype %}{% if ordered_objects %}colMS{% else %}colM{% endif %}{% endblock %}
@@ -58,7 +61,7 @@
             {% endif %}
         {% endif %}
     {% endblock %}
-    <form {% if has_file_field %}enctype="multipart/form-data" {% endif %}action="" method="post" id="{{ opts.module_name }}_form" class="form-horizontal well">{% csrf_token %}{% block form_top %}{% endblock %}
+    <form {% if has_file_field %}enctype="multipart/form-data" {% endif %}action="{{ form_url }}" method="post" id="{{ opts.module_name }}_form" class="form-horizontal well">{% csrf_token %}{% block form_top %}{% endblock %}
 
     {% if is_popup %}<input type="hidden" name="_popup" value="1" />{% endif %}
     {% if save_on_top %}{% block submit_buttons_top %}{% submit_row %}{% endblock %}{% endif %}
@@ -68,17 +71,33 @@
             {% blocktrans count counter=errors|length %}Please correct the error below.{% plural %}Please correct the errors below.{% endblocktrans %}
             {{ adminform.form.non_field_errors }}
         </p>
-    {% endif %}
+    {% endif %}   
 
 		<div class="control-group  field-numero_of">
 			<div class="control-label"><label for="nota_fiscal" class="required">Nota Fiscal:</label></div>
 			<div class="controls">
-				<input class="vTextField span2" id="nota_fiscal_numero" maxlength="30" name="nota_fiscal_numero" type="text" />
+				<input class="vTextField span2" id="id_nota_fiscal_text" name="nota_fiscal_text" maxlength="30" name="nota_fiscal_numero" type="text" />
 				<input class="btn" id="pesquisa_nota_fiscal" name="pesquisa_nota_fiscal" type="button" value="Pesquisar" />
 			</div>
 		</div>
 
 		<div class="list_materiais_nota_fiscal"></div>
+
+    {% block field_sets %}
+    {% for fieldset in adminform %}
+      {% include "admin/includes/fieldset.html" %}
+    {% endfor %}
+    {% endblock %}
+
+    {% block after_field_sets %}{% endblock %}
+
+    {% block inline_field_sets %}
+    {% for inline_admin_formset in inline_admin_formsets %}
+        {% include inline_admin_formset.opts.template %}
+    {% endfor %}
+    {% endblock %}
+
+    {% block after_related_objects %}{% endblock %}
 
     {% block submit_buttons_bottom %}{% submit_row %}{% endblock %}
 
@@ -96,10 +115,12 @@
 		
 		jQuery("#pesquisa_nota_fiscal").click(function(){
 			jQuery.post("/admin/automacao/ordemfabricacao/add/pesquisa_nota_fiscal",{
-						"nota_fiscal_numero" : jQuery("#nota_fiscal_numero").val(),
+						"nota_fiscal" : jQuery("#id_nota_fiscal_text").val(),
 						"csrfmiddlewaretoken" :jQuery("input[name='csrfmiddlewaretoken']").val()
 				}, function(r){
 				jQuery(".list_materiais_nota_fiscal").html(r);
+				jQuery("#id_nota_fiscal option[value='"+jQuery("#nota_fiscal_pk").val()+"']").attr('selected','selected')
+
 			});
 		});
 	
@@ -110,4 +131,5 @@
 		
   })
 </script>
+
 {% endblock %}

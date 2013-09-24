@@ -5,6 +5,7 @@ from django.contrib.admin.options import ModelAdmin,TabularInline
 from models import *
 from forms import *
 from django import forms
+from django.forms import ModelForm, widgets
 import os
 
 class MaterialAdmin(admin.ModelAdmin):
@@ -45,14 +46,21 @@ class NotaFiscalAdmin(admin.ModelAdmin):
 	search_fields = ('numero',)    
 
 class MaterialNotaFiscalAdmin(admin.ModelAdmin):
-	exclude = ('status',)
+	exclude = ('status','ordem_fabricacao',)
 
 
 class AddOrdemFabricacao(forms.Form):
 	nome = forms.CharField("Nome do cara")
-	
+
+class OrdemFabricacaoForm(ModelForm):  
+	exclude = ('nota_fiscal',)
+	class Meta:
+		model = OrdemFabricacao
+		fields = ['numero_of','tipo_material','produto','nota_fiscal']
+		
 class OrdemFabricacaoAdmin(admin.ModelAdmin):
-	pass#form = AddOrdemFabricacao
+	#form = OrdemFabricacaoForm
+
 	change_form_template = "admin/modulos/automacao/add_ordem_fabricacao.html"
 
 admin.site.register(TipoMaterial,TipoMaterialAdmin)

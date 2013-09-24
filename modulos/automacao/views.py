@@ -10,10 +10,11 @@ from django.utils.html import format_html
 from models import OrdemFabricacao,NotaFiscal,TipoMaterial,Produto,Operador,MaterialNotaFiscal,Material
 
 def pesquisa_nota_fiscal(request):       
-	nf = NotaFiscal.objects.filter(numero=request.POST['nota_fiscal_numero'])
+	nf = NotaFiscal.objects.filter(numero=request.POST['nota_fiscal'])
 	if nf.exists():
 		mnf = MaterialNotaFiscal.objects.filter(nota_fiscal__numero=nf[0].numero)
 		html = "\
+			<input type=\"hidden\" id=\"nota_fiscal_pk\" value=\""+str(nf[0].id)+"\" />\
 			<div class=\"inline-group\" id=\"materialnotafiscal_set-group\">\
 		    <div class=\"tabular inline-related last-related\">\
 				<fieldset class=\"module\"><h2>Materiais</h2>\
