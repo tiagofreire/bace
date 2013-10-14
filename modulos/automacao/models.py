@@ -17,8 +17,9 @@ class Material(models.Model):
   class Meta:
     verbose_name = "Material"
     verbose_name_plural = "Materiais"                                             
-    
+  
   tipo_material = models.ForeignKey("TipoMaterial",null=False,blank=False)
+  codigo = models.CharField(u"Código",max_length=50)
   descricao = models.CharField(u"Descrição",max_length=100,null=False,blank=False)
 
   def __unicode__(self):
@@ -104,7 +105,6 @@ class OrdemFabricacao(models.Model):
     return self.numero_of
 
   def save(self, *args, **kwargs):
-    
     super(OrdemFabricacao, self).save(*args, **kwargs)
  
 class MaterialNotaFiscal(models.Model):

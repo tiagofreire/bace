@@ -8,6 +8,7 @@ from django.utils import dateformat
 from datetime import *              
 from django.utils.html import format_html
 from models import OrdemFabricacao,NotaFiscal,TipoMaterial,Produto,Operador,MaterialNotaFiscal,Material
+          
 
 def pesquisa_nota_fiscal(request):       
 	nf = NotaFiscal.objects.filter(numero=request.POST['nota_fiscal'])

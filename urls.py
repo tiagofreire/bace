@@ -14,7 +14,7 @@ urlpatterns = patterns('',
 
     # Uncomment the next line to enable the admin:
     (r'^admin/', include(admin.site.urls)),   
- 		(r'^admin/automacao/ordemfabricacao/',include('modulos.automacao.urls')),
-		(r'^static/(.*)', 'django.views.static.serve', {'document_root': settings.MEDIA_ROOT}), 
-		#(r'^site_media/(.*)', 'django.views.static.serve', {'document_root': settings.MEDIA_ROOT}), 
+     (r'^admin/automacao/ordemfabricacao/',include('modulos.automacao.urls')),
+    (r'^static/(.*)', 'django.views.static.serve', {'document_root': settings.MEDIA_ROOT}), 
+    #(r'^site_media/(.*)', 'django.views.static.serve', {'document_root': settings.MEDIA_ROOT}), 
 )

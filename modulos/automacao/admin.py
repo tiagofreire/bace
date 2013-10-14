@@ -48,7 +48,6 @@ class NotaFiscalAdmin(admin.ModelAdmin):
 class MaterialNotaFiscalAdmin(admin.ModelAdmin):
 	exclude = ('status','ordem_fabricacao',)
 
-
 class AddOrdemFabricacao(forms.Form):
 	nome = forms.CharField("Nome do cara")
 
@@ -59,7 +58,7 @@ class OrdemFabricacaoForm(ModelForm):
 		fields = ['numero_of','tipo_material','produto','nota_fiscal']
 		
 class OrdemFabricacaoAdmin(admin.ModelAdmin):
-	#form = OrdemFabricacaoForm
+	#form = OrdemFabricacaoForm   
 
 	change_form_template = "admin/modulos/automacao/add_ordem_fabricacao.html"
 
