@@ -58,7 +58,8 @@ class OrdemFabricacaoForm(ModelForm):
 		fields = ['numero_of','tipo_material','produto','nota_fiscal']
 		
 class OrdemFabricacaoAdmin(admin.ModelAdmin):
-	#form = OrdemFabricacaoForm   
+	class Media:
+		js = ('admin/js/automacao.ordemfabricacao.js',)
 
 	change_form_template = "admin/modulos/automacao/add_ordem_fabricacao.html"
 

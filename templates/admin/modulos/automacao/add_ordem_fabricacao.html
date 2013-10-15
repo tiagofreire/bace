@@ -12,7 +12,7 @@
     <link rel="stylesheet" type="text/css" href="{% static "admin/css/forms-and-widgets.css" %}" />
     <link rel="stylesheet" type="text/css" href="{% static "admin/css/change-form.css" %}" />
 <style>
-	.field-nota_fiscal { display: none;}
+.field-nota_fiscal,.field-materia_nota_fiscal { display: none;}
 </style>
 {% endblock %}
 
@@ -110,26 +110,5 @@
 
     </form>
 </div>
-<script type="text/javascript">
-  jQuery(function(){    
-		
-		jQuery("#pesquisa_nota_fiscal").click(function(){
-			jQuery.post("/admin/automacao/ordemfabricacao/add/pesquisa_nota_fiscal",{
-						"nota_fiscal" : jQuery("#id_nota_fiscal_text").val(),
-						"csrfmiddlewaretoken" :jQuery("input[name='csrfmiddlewaretoken']").val()
-				}, function(r){
-				jQuery(".list_materiais_nota_fiscal").html(r);
-				jQuery("#id_nota_fiscal option[value='"+jQuery("#nota_fiscal_pk").val()+"']").attr('selected','selected')
-
-			});
-		});
-	
-		jQuery(".field-valor input, #id_valor_total, .field-peso input").maskMoney({decimal:".",thousands:"", precision:2})
-		jQuery(".add-row a").live("click",function(){
-			jQuery(".field-valor input, #id_valor_total, .field-peso input").maskMoney({decimal:".",thousands:"", precision:2});
-		})
-		
-  })
-</script>
 
 {% endblock %}

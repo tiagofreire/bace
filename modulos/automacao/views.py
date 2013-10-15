@@ -37,7 +37,7 @@ def pesquisa_nota_fiscal(request):
 						<td>"+m.volume+"</td>\
 						<td>"+m.data_entrada.strftime("%d/%m/%Y")+"</td>\
 						<td>"+str(m.peso)+"</td><td>"+str(m.valor)+"</td>\
-						<td><input type=\"checkbox\" name=\"materia_nota_fiscal_id\" id=\"materia_nota_fiscal_id\" value=\""+str(m.id)+"\"/></td>"
+						<td><input type=\"checkbox\" onchange=\"OrdemFabricacao.selecionaProdutoNotaFiscal(this,"+str(m.id)+")\" name=\"materia_nota_fiscal_id\" id=\"materia_nota_fiscal_"+str(m.id)+"\" value=\""+str(m.id)+"\"/></td>"
 			html += "</tr>"
 		html += "</tbody>"
 		html += "</table>\
