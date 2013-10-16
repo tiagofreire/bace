@@ -1,6 +1,6 @@
 var OrdemFabricacao = {
   carregaMaterialNotaFiscal : function(){
-    jQuery.post("/admin/automacao/ordemfabricacao/add/pesquisa_nota_fiscal",{
+    jQuery.post("/automacao/ordemfabricacao/add/pesquisa_nota_fiscal",{
 					"nota_fiscal" : jQuery("#id_nota_fiscal_text").val(),
 					"csrfmiddlewaretoken" :jQuery("input[name='csrfmiddlewaretoken']").val()
 			}, function(r){
@@ -9,9 +9,11 @@ var OrdemFabricacao = {
 
 		});
   },   
-  carregaNota : function(){
-    jQuery("#id_nota_fiscal_text").attr('value',jQuery("#id_nota_fiscal :selected").html());
-		OrdemFabricacao.carregaMaterialNotaFiscal();
+  carregaNota : function(){         
+    if (jQuery("#id_nota_fiscal").val() != "") {
+      jQuery("#id_nota_fiscal_text").attr('value',jQuery("#id_nota_fiscal :selected").html());
+		  OrdemFabricacao.carregaMaterialNotaFiscal();                                                            
+	  }
   },
   selecionaProdutoNotaFiscal : function(element, id){
     if (jQuery(element).attr("checked") == "checked")
