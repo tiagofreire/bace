@@ -15,7 +15,7 @@ MANAGERS = ADMINS
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
-        'NAME': 'bace',                      # Or path to database file if using sqlite3.
+        'NAME': 'bace_teste',                      # Or path to database file if using sqlite3.
         'USER': 'postgres',                      # Not used with sqlite3.
         'PASSWORD': 'postgres',                  # Not used with sqlite3.
         'HOST': 'localhost',                      # Set to empty string for localhost. Not used with sqlite3.
@@ -102,7 +102,7 @@ MIDDLEWARE_CLASSES = (
 
 ROOT_URLCONF = 'bace.urls'
 
-TEMPLATE_DIRS = (         
+TEMPLATE_DIRS = (
   os.path.dirname(__file__) + '/templates/'
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
     # Always use forward slashes, even on Windows.
@@ -119,11 +119,15 @@ INSTALLED_APPS = (
     # instalados
     'django.contrib.admin',
     'bootstrap_admin',
-		'south',
+    # 'south',
     # Uncomment the next line to enable admin documentation:
-    # 'django.contrib.admindocs',                 
-		# aplicações
-    'modulos.automacao'
+    # 'django.contrib.admindocs',
+
+		# aplicações     
+		'bace.modulos.automacao', 
+    'bace.modulos.geral',
+    'bace.modulos.estoque'
+
 )
 
 GRAPPELLI_ADMIN_TITLE = "BACE"
