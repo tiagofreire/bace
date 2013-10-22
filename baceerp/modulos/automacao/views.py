@@ -7,8 +7,8 @@ from django.shortcuts import render_to_response, render
 from django.utils import dateformat
 from datetime import *              
 from django.utils.html import format_html
-from modulos.automacao.models import OrdemFabricacao,MaterialNotaFiscal,NotaFiscal
-from modulos.geral.models import TipoMaterial,Produto,Operador,Material
+from baceerp.modulos.automacao.models import OrdemFabricacao,MaterialNotaFiscal,NotaFiscal
+from baceerp.modulos.geral.models import TipoMaterial,Produto,Operador,Material
           
 
 def pesquisa_nota_fiscal(request):       

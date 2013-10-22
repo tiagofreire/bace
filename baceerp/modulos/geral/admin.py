@@ -2,7 +2,7 @@
 from django.contrib import admin
 from django.conf import settings 
 from django.contrib.admin.options import ModelAdmin,TabularInline
-from modulos.geral.models import TipoMaterial,Produto,Operador, Material, Setor, GrupoProduto
+from baceerp.modulos.geral.models import TipoMaterial,Produto,Operador, Material, Setor, GrupoProduto
 from django import forms
 from django.forms import ModelForm, widgets
 import os
