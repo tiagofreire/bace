@@ -128,9 +128,9 @@ INSTALLED_APPS = (
     # 'django.contrib.admindocs',
 
 		# aplicações       
-		'modulos.estoque',
-		'modulos.geral',
-    'modulos.automacao'
+		'bace.modulos.estoque',
+		'bace.modulos.geral',
+    'bace.modulos.automacao'
 
 )
 
