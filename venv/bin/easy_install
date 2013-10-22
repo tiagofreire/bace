@@ -1,4 +1,4 @@
-#!/Users/tiagofreire/Documents/workspace/Python/bace/venv/bin/python
+#!/Users/tiagofreire/Documents/workspace/Python/baceerp/venv/bin/python
 # EASY-INSTALL-ENTRY-SCRIPT: 'setuptools==0.9.8','console_scripts','easy_install'
 __requires__ = 'setuptools==0.9.8'
 import sys
