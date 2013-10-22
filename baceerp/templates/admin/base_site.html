@@ -4,7 +4,12 @@
 {% block title %}{{ title }} | {% trans 'Django site admin' %}{% endblock %}
 
 {% block branding %}
-    <a href="{% url 'admin:index' %}" class="brand" id="site-name">BACE</a>
+    <a href="{% url 'admin:index' %}" class="brand" id="site-name">BACE</a>    
+<style>
+        form {
+margin: 0 !important;
+}
+</style>
 {% endblock %}
 
 {% block nav-global %}{% endblock %}
