@@ -1,4 +1,8 @@
 #-*- coding: utf-8 -*-
+# Django settings for generico_final project.
+import os.path
+
+
 # Django settings for baceerp project.
 
 DEBUG = True
