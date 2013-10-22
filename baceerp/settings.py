@@ -13,7 +13,29 @@ ADMINS = (
 )
 
 MANAGERS = ADMINS
+          
+######################
+# DESENVOLVIMENTO
+######################
 
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
+        'NAME': 'd26pkbt6ejpn89',                      # Or path to database file if using sqlite3.
+        # The following settings are not used with sqlite3:
+        'USER': 'qablmrrqdaxtwl',
+        'PASSWORD': 'Be2XzjpCi_C48yISCIbkK3aa9J',
+        'HOST': 'ec2-54-204-20-28.compute-1.amazonaws.com',                      # Empty for localhost through domain sockets or '127.0.0.1' for localhost through TCP.
+        'PORT': '5432',                      # Set to empty string for default.
+    }
+}
+
+
+
+######################
+# PRODUCAO
+#####################
+"""
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
@@ -25,7 +47,7 @@ DATABASES = {
         'PORT': '5432',                      # Set to empty string for default.
     }
 }
-
+"""
 # Local time zone for this installation. Choices can be found here:
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
 # although not all choices may be available on all operating systems.
