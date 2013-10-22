@@ -103,7 +103,7 @@ MIDDLEWARE_CLASSES = (
     # 'django.middleware.clickjacking.XFrameOptionsMiddleware',
 )
 
-ROOT_URLCONF = 'bace.urls'
+ROOT_URLCONF = 'baceerp.urls'
 
 TEMPLATE_DIRS = (
   os.path.dirname(__file__) + '/templates/'
@@ -128,9 +128,9 @@ INSTALLED_APPS = (
     # 'django.contrib.admindocs',
 
 		# aplicações       
-		'bace.modulos.estoque',
-		'bace.modulos.geral',
-    'bace.modulos.automacao'
+		'baceerp.modulos.estoque',
+		'baceerp.modulos.geral',
+    'baceerp.modulos.automacao'
 
 )
 

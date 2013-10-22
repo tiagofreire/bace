@@ -2,7 +2,7 @@
 from django.conf import settings
 from django.db import models
 from django.db.models import signals
-from bace.modulos.geral.models import TipoMaterial, Material, Produto, Operador
+from baceerp.modulos.geral.models import TipoMaterial, Material, Produto, Operador
 
 class NotaFiscal(models.Model):
   class Meta:
