@@ -21,10 +21,10 @@ class Migration(SchemaMigration):
             (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('nota_fiscal', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['automacao.NotaFiscal'])),
             ('material', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['geral.Material'], null=True, blank=True)),
-            ('volume', self.gf('django.db.models.fields.CharField')(max_length=100, blank=True)),
-            ('data_entrada', self.gf('django.db.models.fields.DateField')(max_length=100, null=True, blank=True)),
-            ('peso', self.gf('django.db.models.fields.DecimalField')(max_length=100, null=True, max_digits=8, decimal_places=2, blank=True)),
-            ('valor', self.gf('django.db.models.fields.DecimalField')(null=True, max_digits=8, decimal_places=2, blank=True)),
+            ('volume', self.gf('django.db.models.fields.PositiveSmallIntegerField')(default=0)),
+            ('data_entrada', self.gf('django.db.models.fields.DateField')(max_length=100)),
+            ('peso', self.gf('django.db.models.fields.DecimalField')(max_length=100, max_digits=8, decimal_places=2)),
+            ('valor', self.gf('django.db.models.fields.DecimalField')(max_digits=8, decimal_places=2)),
             ('status', self.gf('django.db.models.fields.CharField')(max_length=100, null=True, blank=True)),
         ))
         db.send_create_signal(u'automacao', ['MaterialNotaFiscal'])
@@ -62,14 +62,14 @@ class Migration(SchemaMigration):
     models = {
         u'automacao.materialnotafiscal': {
             'Meta': {'object_name': 'MaterialNotaFiscal'},
-            'data_entrada': ('django.db.models.fields.DateField', [], {'max_length': '100', 'null': 'True', 'blank': 'True'}),
+            'data_entrada': ('django.db.models.fields.DateField', [], {'max_length': '100'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'material': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['geral.Material']", 'null': 'True', 'blank': 'True'}),
             'nota_fiscal': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['automacao.NotaFiscal']"}),
-            'peso': ('django.db.models.fields.DecimalField', [], {'max_length': '100', 'null': 'True', 'max_digits': '8', 'decimal_places': '2', 'blank': 'True'}),
+            'peso': ('django.db.models.fields.DecimalField', [], {'max_length': '100', 'max_digits': '8', 'decimal_places': '2'}),
             'status': ('django.db.models.fields.CharField', [], {'max_length': '100', 'null': 'True', 'blank': 'True'}),
-            'valor': ('django.db.models.fields.DecimalField', [], {'null': 'True', 'max_digits': '8', 'decimal_places': '2', 'blank': 'True'}),
-            'volume': ('django.db.models.fields.CharField', [], {'max_length': '100', 'blank': 'True'})
+            'valor': ('django.db.models.fields.DecimalField', [], {'max_digits': '8', 'decimal_places': '2'}),
+            'volume': ('django.db.models.fields.PositiveSmallIntegerField', [], {'default': '0'})
         },
         u'automacao.notafiscal': {
             'Meta': {'object_name': 'NotaFiscal'},

@@ -8,56 +8,18 @@ from django.db import models
 class Migration(SchemaMigration):
 
     def forwards(self, orm):
-        # Adding model 'NotaFiscal'
-        db.create_table(u'automacao_notafiscal', (
-            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('numero', self.gf('django.db.models.fields.CharField')(unique=True, max_length=100)),
-            ('valor_total', self.gf('django.db.models.fields.DecimalField')(max_digits=8, decimal_places=2)),
-        ))
-        db.send_create_signal(u'automacao', ['NotaFiscal'])
 
-        # Adding model 'MaterialNotaFiscal'
-        db.create_table(u'automacao_materialnotafiscal', (
-            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('nota_fiscal', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['automacao.NotaFiscal'])),
-            ('material', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['geral.Material'], null=True, blank=True)),
-            ('volume', self.gf('django.db.models.fields.CharField')(max_length=100, blank=True)),
-            ('data_entrada', self.gf('django.db.models.fields.DateField')(max_length=100, null=True, blank=True)),
-            ('peso', self.gf('django.db.models.fields.DecimalField')(max_length=100, null=True, max_digits=8, decimal_places=2, blank=True)),
-            ('valor', self.gf('django.db.models.fields.DecimalField')(null=True, max_digits=8, decimal_places=2, blank=True)),
-            ('status', self.gf('django.db.models.fields.CharField')(max_length=100, null=True, blank=True)),
-        ))
-        db.send_create_signal(u'automacao', ['MaterialNotaFiscal'])
-
-        # Adding model 'OrdemFabricacao'
-        db.create_table(u'automacao_ordemfabricacao', (
-            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('numero_of', self.gf('django.db.models.fields.CharField')(max_length=100)),
-            ('nota_fiscal', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['automacao.NotaFiscal'])),
-            ('material', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['automacao.MaterialNotaFiscal'])),
-            ('tipo_material', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['geral.TipoMaterial'], null=True, blank=True)),
-            ('produto', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['geral.Produto'], null=True, blank=True)),
-            ('operador', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['geral.Operador'], null=True, blank=True)),
-            ('data_inicial', self.gf('django.db.models.fields.DateField')(max_length=100, null=True, blank=True)),
-            ('data_final', self.gf('django.db.models.fields.DateField')(max_length=100, null=True, blank=True)),
-            ('peso_bruto', self.gf('django.db.models.fields.DecimalField')(max_length=100, null=True, max_digits=8, decimal_places=2, blank=True)),
-            ('peso_liquido', self.gf('django.db.models.fields.DecimalField')(max_length=100, null=True, max_digits=8, decimal_places=2, blank=True)),
-            ('previsao', self.gf('django.db.models.fields.DecimalField')(max_length=100, null=True, max_digits=8, decimal_places=2, blank=True)),
-            ('perda', self.gf('django.db.models.fields.DecimalField')(max_length=100, null=True, max_digits=8, decimal_places=2, blank=True)),
-        ))
-        db.send_create_signal(u'automacao', ['OrdemFabricacao'])
-
+        # Changing field 'NotaFiscal.numero'
+        db.alter_column(u'automacao_notafiscal', 'numero', self.gf('django.db.models.fields.CharField')(max_length=100, unique=True, null=True))
 
     def backwards(self, orm):
-        # Deleting model 'NotaFiscal'
-        db.delete_table(u'automacao_notafiscal')
 
-        # Deleting model 'MaterialNotaFiscal'
-        db.delete_table(u'automacao_materialnotafiscal')
-
-        # Deleting model 'OrdemFabricacao'
-        db.delete_table(u'automacao_ordemfabricacao')
-
+        # User chose to not deal with backwards NULL issues for 'NotaFiscal.numero'
+        raise RuntimeError("Cannot reverse this migration. 'NotaFiscal.numero' and its values cannot be restored.")
+        
+        # The following code is provided here to aid in writing a correct migration
+        # Changing field 'NotaFiscal.numero'
+        db.alter_column(u'automacao_notafiscal', 'numero', self.gf('django.db.models.fields.CharField')(max_length=100, unique=True))
 
     models = {
         u'automacao.materialnotafiscal': {
@@ -74,7 +36,7 @@ class Migration(SchemaMigration):
         u'automacao.notafiscal': {
             'Meta': {'object_name': 'NotaFiscal'},
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'numero': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '100'}),
+            'numero': ('django.db.models.fields.CharField', [], {'max_length': '100', 'unique': 'True', 'null': 'True', 'blank': 'True'}),
             'valor_total': ('django.db.models.fields.DecimalField', [], {'max_digits': '8', 'decimal_places': '2'})
         },
         u'automacao.ordemfabricacao': {
