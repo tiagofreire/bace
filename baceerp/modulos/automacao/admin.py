@@ -37,7 +37,8 @@ class OrdemFabricacaoAdmin(admin.ModelAdmin):
 	class Media:
 		js = ('admin/js/automacao.ordemfabricacao.js',)
 
-	change_form_template = "admin/modulos/automacao/add_ordem_fabricacao.html"
+	#change_form_template = "admin/modulos/automacao/add_ordem_fabricacao.html"
+	change_list_template = "admin/modulos/automacao/list_ordem_fabricacao.html"
 
 #admin.site.register(MaterialNotaFiscal,MaterialNotaFiscalAdmin)
 admin.site.register(NotaFiscal, NotaFiscalAdmin)

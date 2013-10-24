@@ -9,7 +9,7 @@ from datetime import *
 from django.utils.html import format_html
 from baceerp.modulos.automacao.models import OrdemFabricacao,MaterialNotaFiscal,NotaFiscal
 from baceerp.modulos.geral.models import TipoMaterial,Produto,Operador,Material
-          
+from django.template import RequestContext          
 
 def pesquisa_nota_fiscal(request):       
 	nf = NotaFiscal.objects.filter(numero=request.POST['nota_fiscal'])
@@ -47,3 +47,6 @@ def pesquisa_nota_fiscal(request):
 		html = u"<p class=\"errornote alert alert-error fade in\">Nenhuma nota fiscal cadastrada com este número</p>"
 	return HttpResponse(html)             
 	
+	
+def add_of(request):
+  return render_to_response("admin/modulos/automacao/add_ordem_fabricacao.html", {})
