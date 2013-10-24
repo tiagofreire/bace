@@ -79,3 +79,45 @@ class OrdemFabricacao(models.Model):
       self.numero_of = str(self.nota_fiscal)+str(self.material.material.codigo)+str(self.ALFABETO[vol-1] )
       super(OrdemFabricacao, self).save(*args, **kwargs)
       vol = vol+1
+      
+class EtiquetaRemessa(models.Model):
+  TIPO_ETIQUETA = (
+     ("0","Raio"),
+     ("1", "Niple"),
+   )  
+  numero_etiqueta_remessa = models.CharField(u"Etiqueta",max_length=100,blank=False,null=False)  
+  peso = models.DecimalField(u"Peso", max_length=100,max_digits=8,decimal_places=2,blank=False,null=False)
+  tipo_etiqueta = models.CharField("Tipo de Etiqueta",max_length=100, choices=TIPO_ETIQUETA,blank=False,null=False)
+  previsao = models.DecimalField(u"Previsão", max_length=100,max_digits=8,decimal_places=2,blank=True,null=True)
+  data_inicio = models.DateField(u"Data de Início", max_length=100,blank=False,null=False)
+  ordem_fabricacao = models.ForeignKey(OrdemFabricacao)
+  peso_1g = models.DecimalField(u"Peso 1g", max_length=100,max_digits=8,decimal_places=2,blank=False,null=False)
+  produto = models.ForeignKey(Produto)
+
+  class Meta:
+    verbose_name= "Etiqueta"
+    verbose_name_plural= "Eiquetas"  
+    
+class EtiquetaRetorno(models.Model):
+  etiqueta_remessa = models.ForeignKey(EtiquetaRemessa)
+    
+class EtiquetaRetornoRaio(EtiquetaRetorno):
+  peso_desengraxado = models.DecimalField(u"Peso Desengraxado", max_length=100,max_digits=8,decimal_places=2,blank=False,null=False)
+  peso_1g = models.DecimalField(u"Peso 1g", max_length=100,max_digits=8,decimal_places=2,blank=False,null=False)
+  peso_polido = models.DecimalField(u"Peso Polido", max_length=100,max_digits=8,decimal_places=2,blank=False,null=False)
+  quantidade = models.CharField("Quantidade",max_length=100,blank=False,null=False)
+  data = models.DateField(u"Data", max_length=100,blank=False,null=False)
+  responsavel = models.CharField(u"Responsável",max_length=100,blank=False,null=False)
+  
+class EtiquetaRetornoNiple(EtiquetaRetorno):
+  peso_rosqueado = models.DecimalField(u"Peso Rosqueado", max_length=100,max_digits=8,decimal_places=2,blank=False,null=False)
+  peso_1g = models.DecimalField(u"Peso 1g", max_length=100,max_digits=8,decimal_places=2,blank=False,null=False)
+  data_peso_rosqueado = models.DateField(u"Data Rosqueado", max_length=100,blank=False,null=False)
+  quantidade_peso_rosqueado = models.CharField("Quantidade Peso Rosqueado",max_length=100,blank=False,null=False)
+  peso_niquelado = models.DecimalField(u"Peso Niquelado", max_length=100,max_digits=8,decimal_places=2,blank=False,null=False)
+  data_peso_niquelado = models.DateField(u"Data Niquelado", max_length=100,blank=False,null=False)
+  quantidade_peso_niquelado = models.CharField("Quantidade Peso Niquelado",max_length=100,blank=False,null=False)
+  peso_embalado = models.DecimalField(u"Peso Embalado", max_length=100,max_digits=8,decimal_places=2,blank=False,null=False)
+  data_peso_niquelado = models.DateField(u"Data Embalado", max_length=100,blank=False,null=False)
+  quantidade_peso_niquelado = models.CharField("Quantidade Peso Embalado",max_length=100,blank=False,null=False)
+  responsavel = models.CharField(u"Responsável",max_length=100,blank=False,null=False)
