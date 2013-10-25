@@ -7,6 +7,7 @@ from django.forms import ModelForm, widgets
 from models import *
 from forms import *         
 import os
+from django.contrib.admin.helpers import Fieldset
 
 	
 class InlineNotaFiscal(TabularInline):
@@ -35,11 +36,23 @@ class OrdemFabricacaoForm(ModelForm):
 		
 class OrdemFabricacaoAdmin(admin.ModelAdmin):
 	class Media:
-		js = ('admin/js/automacao.ordemfabricacao.js',)
+		pass#js = ('admin/js/automacao.ordemfabricacao.js',)
 
 	#change_form_template = "admin/modulos/automacao/add_ordem_fabricacao.html"
-	change_list_template = "admin/modulos/automacao/list_ordem_fabricacao.html"
+	#change_list_template = "admin/modulos/automacao/list_ordem_fabricacao.html"
+	change_list_template = "admin/modulos/automacao/list_ordem_fabricacao.html"    
+    	
+class EtiquetaAdmin(admin.ModelAdmin):
+	class Media:
+		js = ('admin/js/automacao.etiqueta.js',)
+		
+	fieldsets = [
+        ('Remessa', {'fields': ['tipo_etiqueta','numero_etiqueta_remessa','produto','ordem_fabricacao','peso','previsao','data_inicio','peso_1g']}),
+    ]
+	
+
 
 #admin.site.register(MaterialNotaFiscal,MaterialNotaFiscalAdmin)
 admin.site.register(NotaFiscal, NotaFiscalAdmin)
 admin.site.register(OrdemFabricacao, OrdemFabricacaoAdmin)
+admin.site.register(EtiquetaRemessa, EtiquetaAdmin)

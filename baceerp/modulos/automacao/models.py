@@ -68,6 +68,7 @@ class OrdemFabricacao(models.Model):
   def __unicode__(self):
     return self.numero_of
 
+
   def save(self, *args, **kwargs):
     material_nota_fiscal = MaterialNotaFiscal.objects.get(id=self.material.id)
     material_nota_fiscal.volume=1
@@ -84,7 +85,10 @@ class EtiquetaRemessa(models.Model):
   TIPO_ETIQUETA = (
      ("0","Raio"),
      ("1", "Niple"),
-   )  
+   )
+  
+  ALFABETO = ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z']
+   
   numero_etiqueta_remessa = models.CharField(u"Etiqueta",max_length=100,blank=False,null=False)  
   peso = models.DecimalField(u"Peso", max_length=100,max_digits=8,decimal_places=2,blank=False,null=False)
   tipo_etiqueta = models.CharField("Tipo de Etiqueta",max_length=100, choices=TIPO_ETIQUETA,blank=False,null=False)
@@ -93,6 +97,14 @@ class EtiquetaRemessa(models.Model):
   ordem_fabricacao = models.ForeignKey(OrdemFabricacao)
   peso_1g = models.DecimalField(u"Peso 1g", max_length=100,max_digits=8,decimal_places=2,blank=False,null=False)
   produto = models.ForeignKey(Produto)
+  
+  vol = 1
+  def save(self, *args, **kwargs):
+    quantidade_etiqueta_of = EtiquetaRemessa.objects.filter(ordem_fabricacao=self.ordem_fabricacao).count()
+    print quantidade_etiqueta_of
+    self.numero_etiqueta_remessa = str(self.ordem_fabricacao.numero_of)+str(self.ALFABETO[quantidade_etiqueta_of+1])    
+    print self.numero_etiqueta_remessa
+    super(EtiquetaRemessa, self).save(*args, **kwargs) 
 
   class Meta:
     verbose_name= "Etiqueta"
