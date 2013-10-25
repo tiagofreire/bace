@@ -4,17 +4,17 @@
 
 {% block extrahead %}{{ block.super }}
 <script type="text/javascript" src="{% url 'admin:jsi18n' %}"></script>
-{{ media }}
+
+{{ block.super }}
+{{ media.js }}
 {% endblock %}
 
 {% block extrastyle %}
     {{ block.super }}
     <link rel="stylesheet" type="text/css" href="{% static "admin/css/forms-and-widgets.css" %}" />
     <link rel="stylesheet" type="text/css" href="{% static "admin/css/change-form.css" %}" />
-<style>
-/*.field-nota_fiscal,.field-materia_nota_fiscal { display: none;}*/
-</style>
 {% endblock %}
+                                                                                     
 
 {% block coltype %}{% if ordered_objects %}colMS{% else %}colM{% endif %}{% endblock %}
 
@@ -27,7 +27,7 @@
             <a href="{% url 'admin:index' %}">{% trans 'Home' %}</a> <span class="divider">/</span>
         </li>
         <li>
-            <a href="{% url 'admin:app_list' app_label=opts.app_label %}">{{ app_label|capfirst|escape }}</a> <span class="divider">/</span>
+            <a href="/automacao/ordemfabricacao">Ordem de Fabricação</a> <span class="divider">/</span>
         </li>
         <li>
             {% if has_change_permission %}<a href="{% url opts|admin_urlname:'changelist' %}">{{ opts.verbose_name_plural|capfirst }}</a>{% else %}{{ opts.verbose_name_plural|capfirst }}{% endif %} <span class="divider">/</span>
@@ -61,10 +61,12 @@
             {% endif %}
         {% endif %}
     {% endblock %}
-    <form {% if has_file_field %}enctype="multipart/form-data" {% endif %}action="{{ form_url }}" method="post" id="{{ opts.module_name }}_form" class="form-horizontal well">{% csrf_token %}{% block form_top %}{% endblock %}
+    <form action="/automacao/ordemfabricacao/add/gera_ordem_fabricacao" method="post" id="{{ opts.module_name }}_form" class="form-horizontal well">
+	
+			<input type="hidden" name="csrfmiddlewaretoken" id="csrfmiddlewaretoken" value="a3e0c8ebc18ed8df670af60d18443e3f" />
 
     {% if is_popup %}<input type="hidden" name="_popup" value="1" />{% endif %}
-    {% if save_on_top %}{% block submit_buttons_top %}{% submit_row %}{% endblock %}{% endif %}
+
     {% if errors %}
         <p class="errornote alert alert-error fade in">
             <button data-dismiss="alert" class="close" type="button">×</button>
@@ -76,7 +78,7 @@
 		<div class="control-group  field-numero_of">
 			<div class="control-label"><label for="nota_fiscal" class="required">Nota Fiscal:</label></div>
 			<div class="controls">
-				<input class="vTextField span2" id="id_nota_fiscal_text" name="nota_fiscal_text" maxlength="30" name="nota_fiscal_numero" type="text" />
+				<input class="vTextField span2" id="id_nota_fiscal_text" maxlength="30" name="nota_fiscal_numero" type="text" />
 				<input class="btn" id="pesquisa_nota_fiscal" name="pesquisa_nota_fiscal" type="button" value="Pesquisar" />
 			</div>
 		</div>
@@ -99,14 +101,28 @@
 
     {% block after_related_objects %}{% endblock %}
 
-    {% block submit_buttons_bottom %}{% submit_row %}{% endblock %}
+
+
+		<div class="form-actions navbar navbar-fixed-bottom">
+		    <div class="container">
+		        <div class="pull-left delete-link-box">
+		        </div>
+		        <div class="pull-right save-options-box">
+							<input type="submit" value="Salvar e continuar editando" name="_continue"  class="btn btn-primary"/>
+							<input type="submit" value="Salvar e Adicionar outro" name="_addanother"  class="btn"/>
+							<input type="submit" value="Salvar" name="_save"  class="btn"/>
+		        </div>
+		    </div>
+		</div>
 
     {% if adminform.first_field and add %}
        <script type="text/javascript">document.getElementById("{{ adminform.first_field.id_for_label }}").focus();</script>
     {% endif %}
 
+<script src="{% static "admin/js/automacao.ordemfabricacao.js" %}"></script>
+
     {# JavaScript for prepopulated fields #}
-    {% prepopulated_fields_js %}   
+
 
     </form>
 </div>

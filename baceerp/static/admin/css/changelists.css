@@ -1,5 +1,6 @@
 #content h1{
-    display: inline-block;
+    display: inline-block; 
+    font-size: 30px !important;
 }
 .object-tools{
     list-style: none;
