@@ -20,6 +20,13 @@ var OrdemFabricacao = {
       jQuery("#id_materia_nota_fiscal option[value='"+id+"']").attr("selected",true);
     else
       jQuery("#id_materia_nota_fiscal option[value='"+id+"']").attr("selected",false);
+  },  
+  carregaSelectVolumeMaterial : function(div,qtd){   
+    jQuery.each(jQuery("#list_material_nota_fical select").size(), function(k,v){
+                                                               
+    });
+    jQuery(div).append("<option value=\"\">-Selecione-</option>")
+    for(var x=1;x<=qtd;x++){jQuery("#volumeMaterial").append("<option value=\""+x+"\">"+x+"</option>");}
   },
   init : function(){
     OrdemFabricacao.carregaNota();

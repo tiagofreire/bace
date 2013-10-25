@@ -67,15 +67,3 @@ class OrdemFabricacao(models.Model):
 
   def __unicode__(self):
     return self.numero_of
-
-  def save(self, *args, **kwargs):
-    material_nota_fiscal = MaterialNotaFiscal.objects.get(id=self.material.id)
-    material_nota_fiscal.volume=1
-    material_nota_fiscal.save()
-    print self.material.id
-
-    vol = 1
-    while vol < self.material.volume+1:
-      self.numero_of = str(self.nota_fiscal)+str(self.material.material.codigo)+str(self.ALFABETO[vol-1] )
-      super(OrdemFabricacao, self).save(*args, **kwargs)
-      vol = vol+1

@@ -63,9 +63,12 @@
           <li>
             <!-- <a href="{% url cl.opts|admin_urlname:'add' %}{% if is_popup %}?_popup=1{% endif %}" class="addlink btn btn-primary">
               {% blocktrans with cl.opts.verbose_name as name %}Add {{ name }}{% endblocktrans %}
-            </a>               -->
-            <a href="/automacao/ordemfabricacao/add/of" class="addlink btn btn-primary">
-              Criar Ordem de Fabricação
+            </a>              -->
+						<a href="{% url cl.opts|admin_urlname:'add' %}{% if is_popup %}?_popup=1{% endif %}" class="addlink btn btn-primary">
+							Ordem de Fabricação Avulso
+            </a>
+            <a href="/automacao/ordemfabricacao/add/add_ordem_fabricacao" class="addlink btn btn-primary">
+              Gerar Ordens de Fabricação
             </a>
 
           </li>
