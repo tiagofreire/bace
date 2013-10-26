@@ -23,17 +23,17 @@
 {% if not is_popup %}
 {% block breadcrumbs %}
     <ul class="breadcrumb">
-        <li>
-            <a href="{% url 'admin:index' %}">{% trans 'Home' %}</a> <span class="divider">/</span>
-        </li>
-        <li>
-            <a href="/automacao/ordemfabricacao">Ordem de Fabricação</a> <span class="divider">/</span>
-        </li>
-        <li>
-            {% if has_change_permission %}<a href="{% url opts|admin_urlname:'changelist' %}">{{ opts.verbose_name_plural|capfirst }}</a>{% else %}{{ opts.verbose_name_plural|capfirst }}{% endif %} <span class="divider">/</span>
-        </li>
-        <li class="active">{% if add %}{% trans 'Add' %} {{ opts.verbose_name }}{% else %}{{ original|truncatewords:"18" }}{% endif %}</li>
-    </ul>
+			<li>
+				<a href="/">Início</a> <span class="divider">/</span>
+			</li>
+			<li>
+				<a href="/automacao/">Automacao</a> <span class="divider">/</span>
+			</li>
+			<li>
+				<a href="/automacao/ordemfabricacao/">Ordens de Fabricação</a> <span class="divider">/</span>
+			</li>
+			<li class="active">Gerar Ordem de Fabricação</li>
+		</ul>
 {% endblock %}
 {% endif %}
 
@@ -61,7 +61,7 @@
             {% endif %}
         {% endif %}
     {% endblock %}
-    <form action="/automacao/ordemfabricacao/add/gera_ordem_fabricacao" method="post" id="{{ opts.module_name }}_form" class="form-horizontal well">
+    <form action="/automacao/ordemfabricacao/add/gera_ordem_fabricacao" method="post" id="{{ opts.module_name }}_form" class="form_gera_ordem_fabricacao form-horizontal well">
 	
 			<input type="hidden" name="csrfmiddlewaretoken" id="csrfmiddlewaretoken" value="a3e0c8ebc18ed8df670af60d18443e3f" />
 
@@ -84,7 +84,8 @@
 		</div>
 
 		<div class="list_materiais_nota_fiscal"></div>
-
+		   
+		
     {% block field_sets %}
     {% for fieldset in adminform %}
       {% include "admin/includes/fieldset.html" %}
@@ -108,9 +109,9 @@
 		        <div class="pull-left delete-link-box">
 		        </div>
 		        <div class="pull-right save-options-box">
-							<input type="submit" value="Salvar e continuar editando" name="_continue"  class="btn btn-primary"/>
-							<input type="submit" value="Salvar e Adicionar outro" name="_addanother"  class="btn"/>
-							<input type="submit" value="Salvar" name="_save"  class="btn"/>
+							<input type="button" value="Salvar e continuar editando" name="_continue"  class="btn btn-primary btn_gera_ordem_fabricacao"/>
+							<input type="button" value="Salvar e Adicionar outro" name="_addanother"  class="btn btn_gera_ordem_fabricacao"/>
+							<input type="button" value="Salvar" name="_save"  class="btn btn_gera_ordem_fabricacao"/>
 		        </div>
 		    </div>
 		</div>
@@ -118,8 +119,9 @@
     {% if adminform.first_field and add %}
        <script type="text/javascript">document.getElementById("{{ adminform.first_field.id_for_label }}").focus();</script>
     {% endif %}
+                     
+		<script src="{% static "admin/js/automacao.ordemfabricacao.js" %}"></script>    
 
-<script src="{% static "admin/js/automacao.ordemfabricacao.js" %}"></script>
 
     {# JavaScript for prepopulated fields #}
 

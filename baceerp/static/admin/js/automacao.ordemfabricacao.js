@@ -29,13 +29,14 @@ var OrdemFabricacao = {
     for(var x=1;x<=qtd;x++){jQuery("#volumeMaterial").append("<option value=\""+x+"\">"+x+"</option>");}
   },
   init : function(){
-    OrdemFabricacao.carregaNota();
+    //OrdemFabricacao.carregaNota();
   	jQuery("#pesquisa_nota_fiscal").click(function(){
   		OrdemFabricacao.carregaMaterialNotaFiscal();
-   	});                               
-   	setTimeout(function(){
-   	  
-                                  
+   	});                   
+   	jQuery(".btn_gera_ordem_fabricacao").click(function(){
+   	  jQuery(".form_gera_ordem_fabricacao").submit()
+   	})
+   	setTimeout(function(){                              
    	jQuery(document).ready(function(){
       jQuery.each(jQuery("#id_materia_nota_fiscal :selected"), function(k,v){
         jQuery("#materia_nota_fiscal_"+$(v).val()).attr("checked",true);
