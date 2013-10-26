@@ -4,9 +4,10 @@ from django.contrib.admin import widgets
 from django.db.models import Q
 from django.forms import ModelForm
 from models import OrdemFabricacao
+from django.contrib.admin.widgets import AdminDateWidget 
 
 class FormOrdemFabricacao(forms.Form):
   nota_fiscal_numero = forms.CharField(required=True)
-  data_inicial = forms.DateField(u"Data de Início")
+  data_inicial = forms.DateField(widget=AdminDateWidget)
   class Meta:
     model = OrdemFabricacao
