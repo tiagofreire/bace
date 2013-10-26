@@ -7,8 +7,7 @@ from django import forms
 from django.forms import ModelForm, widgets
 import os
 
-class MaterialAdmin(admin.ModelAdmin):    
-  exclude = ('codigo',)
+class MaterialAdmin(admin.ModelAdmin):
   list_display=('descricao',)
   list_per_page = 25
   search_fields = ['descricao']

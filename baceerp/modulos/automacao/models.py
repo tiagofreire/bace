@@ -1,9 +1,7 @@
 #-*- coding: utf-8 -*-
-from django.conf import settings
 from django.db import models
-from django.db.models import signals
-from baceerp.modulos.geral.models import TipoMaterial, Material, Produto, Operador
-import sys
+from baceerp.modulos.geral.models import Material, Produto, Operador
+
 
 class NotaFiscal(models.Model):
   class Meta:
@@ -98,9 +96,12 @@ class EtiquetaRemessa(models.Model):
     verbose_name_plural= "Eiquetas"  
 
   def __unicode__(self):
-    return self.numero_etiqueta_remessa
+    return self.numero_etiqueta_remessa   
+    
+    
 class EtiquetaRetorno(models.Model):
   etiqueta_remessa = models.ForeignKey(EtiquetaRemessa)
+    
     
 class EtiquetaRetornoRaio(EtiquetaRetorno):
   peso_desengraxado = models.DecimalField(u"Peso Desengraxado", max_length=100,max_digits=8,decimal_places=2,blank=False,null=False)
@@ -109,7 +110,8 @@ class EtiquetaRetornoRaio(EtiquetaRetorno):
   quantidade = models.CharField("Quantidade",max_length=100,blank=False,null=False)
   data = models.DateField(u"Data", max_length=100,blank=False,null=False)
   responsavel = models.CharField(u"Responsável",max_length=100,blank=False,null=False)
-  
+    
+    
 class EtiquetaRetornoNiple(EtiquetaRetorno):
   peso_rosqueado = models.DecimalField(u"Peso Rosqueado", max_length=100,max_digits=8,decimal_places=2,blank=False,null=False)
   peso_1g = models.DecimalField(u"Peso 1g", max_length=100,max_digits=8,decimal_places=2,blank=False,null=False)

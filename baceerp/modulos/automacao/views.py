@@ -73,3 +73,9 @@ def gera_ordem_fabricacao(request):
   material_nota_fiscal.volume=0
   material_nota_fiscal.save()
   return HttpResponseRedirect("/automacao/ordemfabricacao/")
+  
+def add_etiqueta(request):  
+  form = FormOrdemFabricacao()
+  return render(request, "admin/modulos/automacao/add_ordem_fabricacao.html", {
+          'form': form,
+      })  
