@@ -28,6 +28,7 @@ class TipoMaterialAdmin(admin.ModelAdmin):
   search_fields = ['descricao']
 
 class ProdutoAdmin(admin.ModelAdmin):
+  exclude = ('codigo',)
   list_display=('descricao',)
   list_per_page = 25
   search_fields = ['descricao']
