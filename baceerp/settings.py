@@ -153,8 +153,7 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     #'django.contrib.sites',
     'django.contrib.messages',
-    'django.contrib.staticfiles',     
-    
+    'django.contrib.staticfiles',         
     # instalados
     'django.contrib.admin',
     'bootstrap_admin',
