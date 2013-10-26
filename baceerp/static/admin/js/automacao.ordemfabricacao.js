@@ -1,7 +1,7 @@
 var OrdemFabricacao = {
   carregaMaterialNotaFiscal : function(){
     jQuery.post("/automacao/ordemfabricacao/add/pesquisa_nota_fiscal",{
-					"nota_fiscal" : jQuery("#id_nota_fiscal_text").val(),
+					"nota_fiscal" : jQuery("#id_nota_fiscal_numero").val(),
 					"csrfmiddlewaretoken" :jQuery("input[name='csrfmiddlewaretoken']").val()
 			}, function(r){
 			jQuery(".list_materiais_nota_fiscal").html(r);
