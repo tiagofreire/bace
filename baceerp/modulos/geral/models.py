@@ -74,7 +74,15 @@ class Produto(models.Model):
 
   grupo_produto = models.ForeignKey(GrupoProduto,null=False,blank=False)
   codigo = models.CharField(u"Código",max_length=100,null=False,blank=False)
-  descricao = models.TextField(u"Descrição",unique=True, max_length=100,null=False,blank=False)
+  descricao = models.CharField(u"Descrição",unique=True, max_length=100,null=False,blank=False)
   
   def __unicode__(self):
-    return self.codigo
+    return self.descricao
+    
+  def save(self, *args, **kwargs):
+    if self.id != None:
+      produto_id = str(self.id)
+    else:
+      produto_id = str(Produto.objects.all().count()+1)
+    self.codigo = str(self.grupo_produto.id)+"."+produto_id
+    super(Produto, self).save(*args, **kwargs)

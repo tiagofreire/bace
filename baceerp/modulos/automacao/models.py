@@ -55,7 +55,6 @@ class OrdemFabricacao(models.Model):
   numero_of = models.CharField(u"Ordem de fabricação",max_length=100,blank=False,null=False)
   nota_fiscal = models.ForeignKey(NotaFiscal)
   material = models.ForeignKey(MaterialNotaFiscal,blank=False,null=False)
-  tipo_material = models.ForeignKey(TipoMaterial,blank=True,null=True)
   produto = models.ForeignKey(Produto,blank=True,null=True)
   operador = models.ForeignKey(Operador,blank=True,null=True)
   data_inicial = models.DateField(u"Data Inicial", max_length=100,blank=True,null=True)
@@ -97,7 +96,9 @@ class EtiquetaRemessa(models.Model):
   class Meta:
     verbose_name= "Etiqueta"
     verbose_name_plural= "Eiquetas"  
-    
+
+  def __unicode__(self):
+    return self.numero_etiqueta_remessa
 class EtiquetaRetorno(models.Model):
   etiqueta_remessa = models.ForeignKey(EtiquetaRemessa)
     
