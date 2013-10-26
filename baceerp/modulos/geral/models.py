@@ -23,7 +23,15 @@ class Material(models.Model):
   descricao = models.CharField(u"Descrição",max_length=100,null=False,blank=False)
 
   def __unicode__(self):
-    return self.descricao
+    return self.descricao   
+    
+  def save(self, *args, **kwargs):
+    if self.id != None:
+      material_id = str(self.id)
+    else:
+      material_id = str(Material.objects.all().count()+1)
+    self.codigo = str(self.tipo_material.id)+"."+material_id
+    super(Material, self).save(*args, **kwargs)
     
 class Setor(models.Model):
   class Meta:

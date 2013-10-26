@@ -21,10 +21,10 @@ class Migration(SchemaMigration):
             (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('nota_fiscal', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['automacao.NotaFiscal'])),
             ('material', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['geral.Material'], null=True, blank=True)),
-            ('volume', self.gf('django.db.models.fields.CharField')(max_length=100, blank=True)),
-            ('data_entrada', self.gf('django.db.models.fields.DateField')(max_length=100, null=True, blank=True)),
-            ('peso', self.gf('django.db.models.fields.DecimalField')(max_length=100, null=True, max_digits=8, decimal_places=2, blank=True)),
-            ('valor', self.gf('django.db.models.fields.DecimalField')(null=True, max_digits=8, decimal_places=2, blank=True)),
+            ('volume', self.gf('django.db.models.fields.PositiveSmallIntegerField')(default=0)),
+            ('data_entrada', self.gf('django.db.models.fields.DateField')(max_length=100)),
+            ('peso', self.gf('django.db.models.fields.DecimalField')(max_length=100, max_digits=8, decimal_places=2)),
+            ('valor', self.gf('django.db.models.fields.DecimalField')(max_digits=8, decimal_places=2)),
             ('status', self.gf('django.db.models.fields.CharField')(max_length=100, null=True, blank=True)),
         ))
         db.send_create_signal(u'automacao', ['MaterialNotaFiscal'])
@@ -47,6 +47,54 @@ class Migration(SchemaMigration):
         ))
         db.send_create_signal(u'automacao', ['OrdemFabricacao'])
 
+        # Adding model 'EtiquetaRemessa'
+        db.create_table(u'automacao_etiquetaremessa', (
+            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('numero_etiqueta_remessa', self.gf('django.db.models.fields.CharField')(max_length=100)),
+            ('peso', self.gf('django.db.models.fields.DecimalField')(max_length=100, max_digits=8, decimal_places=2)),
+            ('tipo_etiqueta', self.gf('django.db.models.fields.CharField')(max_length=100)),
+            ('previsao', self.gf('django.db.models.fields.DecimalField')(max_length=100, null=True, max_digits=8, decimal_places=2, blank=True)),
+            ('data_inicio', self.gf('django.db.models.fields.DateField')(max_length=100)),
+            ('ordem_fabricacao', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['automacao.OrdemFabricacao'])),
+            ('peso_1g', self.gf('django.db.models.fields.DecimalField')(max_length=100, max_digits=8, decimal_places=2)),
+            ('produto', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['geral.Produto'])),
+        ))
+        db.send_create_signal(u'automacao', ['EtiquetaRemessa'])
+
+        # Adding model 'EtiquetaRetorno'
+        db.create_table(u'automacao_etiquetaretorno', (
+            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('etiqueta_remessa', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['automacao.EtiquetaRemessa'])),
+        ))
+        db.send_create_signal(u'automacao', ['EtiquetaRetorno'])
+
+        # Adding model 'EtiquetaRetornoRaio'
+        db.create_table(u'automacao_etiquetaretornoraio', (
+            (u'etiquetaretorno_ptr', self.gf('django.db.models.fields.related.OneToOneField')(to=orm['automacao.EtiquetaRetorno'], unique=True, primary_key=True)),
+            ('peso_desengraxado', self.gf('django.db.models.fields.DecimalField')(max_length=100, max_digits=8, decimal_places=2)),
+            ('peso_1g', self.gf('django.db.models.fields.DecimalField')(max_length=100, max_digits=8, decimal_places=2)),
+            ('peso_polido', self.gf('django.db.models.fields.DecimalField')(max_length=100, max_digits=8, decimal_places=2)),
+            ('quantidade', self.gf('django.db.models.fields.CharField')(max_length=100)),
+            ('data', self.gf('django.db.models.fields.DateField')(max_length=100)),
+            ('responsavel', self.gf('django.db.models.fields.CharField')(max_length=100)),
+        ))
+        db.send_create_signal(u'automacao', ['EtiquetaRetornoRaio'])
+
+        # Adding model 'EtiquetaRetornoNiple'
+        db.create_table(u'automacao_etiquetaretornoniple', (
+            (u'etiquetaretorno_ptr', self.gf('django.db.models.fields.related.OneToOneField')(to=orm['automacao.EtiquetaRetorno'], unique=True, primary_key=True)),
+            ('peso_rosqueado', self.gf('django.db.models.fields.DecimalField')(max_length=100, max_digits=8, decimal_places=2)),
+            ('peso_1g', self.gf('django.db.models.fields.DecimalField')(max_length=100, max_digits=8, decimal_places=2)),
+            ('data_peso_rosqueado', self.gf('django.db.models.fields.DateField')(max_length=100)),
+            ('quantidade_peso_rosqueado', self.gf('django.db.models.fields.CharField')(max_length=100)),
+            ('peso_niquelado', self.gf('django.db.models.fields.DecimalField')(max_length=100, max_digits=8, decimal_places=2)),
+            ('peso_embalado', self.gf('django.db.models.fields.DecimalField')(max_length=100, max_digits=8, decimal_places=2)),
+            ('data_peso_niquelado', self.gf('django.db.models.fields.DateField')(max_length=100)),
+            ('quantidade_peso_niquelado', self.gf('django.db.models.fields.CharField')(max_length=100)),
+            ('responsavel', self.gf('django.db.models.fields.CharField')(max_length=100)),
+        ))
+        db.send_create_signal(u'automacao', ['EtiquetaRetornoNiple'])
+
 
     def backwards(self, orm):
         # Deleting model 'NotaFiscal'
@@ -58,18 +106,70 @@ class Migration(SchemaMigration):
         # Deleting model 'OrdemFabricacao'
         db.delete_table(u'automacao_ordemfabricacao')
 
+        # Deleting model 'EtiquetaRemessa'
+        db.delete_table(u'automacao_etiquetaremessa')
+
+        # Deleting model 'EtiquetaRetorno'
+        db.delete_table(u'automacao_etiquetaretorno')
+
+        # Deleting model 'EtiquetaRetornoRaio'
+        db.delete_table(u'automacao_etiquetaretornoraio')
+
+        # Deleting model 'EtiquetaRetornoNiple'
+        db.delete_table(u'automacao_etiquetaretornoniple')
+
 
     models = {
+        u'automacao.etiquetaremessa': {
+            'Meta': {'object_name': 'EtiquetaRemessa'},
+            'data_inicio': ('django.db.models.fields.DateField', [], {'max_length': '100'}),
+            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'numero_etiqueta_remessa': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
+            'ordem_fabricacao': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['automacao.OrdemFabricacao']"}),
+            'peso': ('django.db.models.fields.DecimalField', [], {'max_length': '100', 'max_digits': '8', 'decimal_places': '2'}),
+            'peso_1g': ('django.db.models.fields.DecimalField', [], {'max_length': '100', 'max_digits': '8', 'decimal_places': '2'}),
+            'previsao': ('django.db.models.fields.DecimalField', [], {'max_length': '100', 'null': 'True', 'max_digits': '8', 'decimal_places': '2', 'blank': 'True'}),
+            'produto': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['geral.Produto']"}),
+            'tipo_etiqueta': ('django.db.models.fields.CharField', [], {'max_length': '100'})
+        },
+        u'automacao.etiquetaretorno': {
+            'Meta': {'object_name': 'EtiquetaRetorno'},
+            'etiqueta_remessa': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['automacao.EtiquetaRemessa']"}),
+            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'})
+        },
+        u'automacao.etiquetaretornoniple': {
+            'Meta': {'object_name': 'EtiquetaRetornoNiple', '_ormbases': [u'automacao.EtiquetaRetorno']},
+            'data_peso_niquelado': ('django.db.models.fields.DateField', [], {'max_length': '100'}),
+            'data_peso_rosqueado': ('django.db.models.fields.DateField', [], {'max_length': '100'}),
+            u'etiquetaretorno_ptr': ('django.db.models.fields.related.OneToOneField', [], {'to': u"orm['automacao.EtiquetaRetorno']", 'unique': 'True', 'primary_key': 'True'}),
+            'peso_1g': ('django.db.models.fields.DecimalField', [], {'max_length': '100', 'max_digits': '8', 'decimal_places': '2'}),
+            'peso_embalado': ('django.db.models.fields.DecimalField', [], {'max_length': '100', 'max_digits': '8', 'decimal_places': '2'}),
+            'peso_niquelado': ('django.db.models.fields.DecimalField', [], {'max_length': '100', 'max_digits': '8', 'decimal_places': '2'}),
+            'peso_rosqueado': ('django.db.models.fields.DecimalField', [], {'max_length': '100', 'max_digits': '8', 'decimal_places': '2'}),
+            'quantidade_peso_niquelado': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
+            'quantidade_peso_rosqueado': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
+            'responsavel': ('django.db.models.fields.CharField', [], {'max_length': '100'})
+        },
+        u'automacao.etiquetaretornoraio': {
+            'Meta': {'object_name': 'EtiquetaRetornoRaio', '_ormbases': [u'automacao.EtiquetaRetorno']},
+            'data': ('django.db.models.fields.DateField', [], {'max_length': '100'}),
+            u'etiquetaretorno_ptr': ('django.db.models.fields.related.OneToOneField', [], {'to': u"orm['automacao.EtiquetaRetorno']", 'unique': 'True', 'primary_key': 'True'}),
+            'peso_1g': ('django.db.models.fields.DecimalField', [], {'max_length': '100', 'max_digits': '8', 'decimal_places': '2'}),
+            'peso_desengraxado': ('django.db.models.fields.DecimalField', [], {'max_length': '100', 'max_digits': '8', 'decimal_places': '2'}),
+            'peso_polido': ('django.db.models.fields.DecimalField', [], {'max_length': '100', 'max_digits': '8', 'decimal_places': '2'}),
+            'quantidade': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
+            'responsavel': ('django.db.models.fields.CharField', [], {'max_length': '100'})
+        },
         u'automacao.materialnotafiscal': {
             'Meta': {'object_name': 'MaterialNotaFiscal'},
-            'data_entrada': ('django.db.models.fields.DateField', [], {'max_length': '100', 'null': 'True', 'blank': 'True'}),
+            'data_entrada': ('django.db.models.fields.DateField', [], {'max_length': '100'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'material': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['geral.Material']", 'null': 'True', 'blank': 'True'}),
             'nota_fiscal': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['automacao.NotaFiscal']"}),
-            'peso': ('django.db.models.fields.DecimalField', [], {'max_length': '100', 'null': 'True', 'max_digits': '8', 'decimal_places': '2', 'blank': 'True'}),
+            'peso': ('django.db.models.fields.DecimalField', [], {'max_length': '100', 'max_digits': '8', 'decimal_places': '2'}),
             'status': ('django.db.models.fields.CharField', [], {'max_length': '100', 'null': 'True', 'blank': 'True'}),
-            'valor': ('django.db.models.fields.DecimalField', [], {'null': 'True', 'max_digits': '8', 'decimal_places': '2', 'blank': 'True'}),
-            'volume': ('django.db.models.fields.CharField', [], {'max_length': '100', 'blank': 'True'})
+            'valor': ('django.db.models.fields.DecimalField', [], {'max_digits': '8', 'decimal_places': '2'}),
+            'volume': ('django.db.models.fields.PositiveSmallIntegerField', [], {'default': '0'})
         },
         u'automacao.notafiscal': {
             'Meta': {'object_name': 'NotaFiscal'},

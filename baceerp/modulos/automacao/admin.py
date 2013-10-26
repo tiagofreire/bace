@@ -33,14 +33,15 @@ class OrdemFabricacaoForm(ModelForm):
 	class Meta:
 		model = OrdemFabricacao
 		fields = ['numero_of','tipo_material','produto','nota_fiscal']
-		
+			
 class OrdemFabricacaoAdmin(admin.ModelAdmin):
-	class Media:
-		pass#js = ('admin/js/automacao.ordemfabricacao.js',)
-
+  search_fields = ('numero_of',)
+  list_display = ('numero_of','material',)
+  change_list_template = "admin/modulos/automacao/list_ordem_fabricacao.html"    
+  list_per_page = 25
 	#change_form_template = "admin/modulos/automacao/add_ordem_fabricacao.html"
 	#change_list_template = "admin/modulos/automacao/list_ordem_fabricacao.html"
-	change_list_template = "admin/modulos/automacao/list_ordem_fabricacao.html"    
+
     	
 class EtiquetaAdmin(admin.ModelAdmin):
 	class Media:
