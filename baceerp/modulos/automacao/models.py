@@ -55,7 +55,6 @@ class OrdemFabricacao(models.Model):
   numero_of = models.CharField(u"Ordem de fabricação",max_length=100,blank=False,null=False)
   nota_fiscal = models.ForeignKey(NotaFiscal)
   material = models.ForeignKey(MaterialNotaFiscal,blank=False,null=False)
-  tipo_material = models.ForeignKey(TipoMaterial,blank=True,null=True)
   produto = models.ForeignKey(Produto,blank=True,null=True)
   operador = models.ForeignKey(Operador,blank=True,null=True)
   data_inicial = models.DateField(u"Data Inicial", max_length=100,blank=True,null=True)
@@ -68,18 +67,6 @@ class OrdemFabricacao(models.Model):
   def __unicode__(self):
     return self.numero_of
 
-
-  def save(self, *args, **kwargs):
-    material_nota_fiscal = MaterialNotaFiscal.objects.get(id=self.material.id)
-    material_nota_fiscal.volume=1
-    material_nota_fiscal.save()
-    print self.material.id
-
-    vol = 1
-    while vol < self.material.volume+1:
-      self.numero_of = str(self.nota_fiscal)+str(self.material.material.codigo)+str(self.ALFABETO[vol-1] )
-      super(OrdemFabricacao, self).save(*args, **kwargs)
-      vol = vol+1
       
 class EtiquetaRemessa(models.Model):
   TIPO_ETIQUETA = (

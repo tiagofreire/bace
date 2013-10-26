@@ -32,14 +32,13 @@ class OrdemFabricacaoForm(ModelForm):
 	exclude = ('nota_fiscal',)
 	class Meta:
 		model = OrdemFabricacao
-		fields = ['numero_of','tipo_material','produto','nota_fiscal']
+		fields = ['numero_of','produto','nota_fiscal']
 		
 class OrdemFabricacaoAdmin(admin.ModelAdmin):
 	class Media:
 		pass#js = ('admin/js/automacao.ordemfabricacao.js',)
 
 	#change_form_template = "admin/modulos/automacao/add_ordem_fabricacao.html"
-	#change_list_template = "admin/modulos/automacao/list_ordem_fabricacao.html"
 	change_list_template = "admin/modulos/automacao/list_ordem_fabricacao.html"    
     	
 class EtiquetaAdmin(admin.ModelAdmin):
@@ -50,7 +49,6 @@ class EtiquetaAdmin(admin.ModelAdmin):
         ('Remessa', {'fields': ['tipo_etiqueta','numero_etiqueta_remessa','produto','ordem_fabricacao','peso','previsao','data_inicio','peso_1g']}),
     ]
 	
-
 
 #admin.site.register(MaterialNotaFiscal,MaterialNotaFiscalAdmin)
 admin.site.register(NotaFiscal, NotaFiscalAdmin)
