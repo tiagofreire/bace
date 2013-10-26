@@ -77,14 +77,21 @@
 
 		<div class="control-group  field-numero_of">
 			<div class="control-label"><label for="nota_fiscal" class="required">Nota Fiscal:</label></div>
-			<div class="controls">
-				<input class="vTextField span2" id="id_nota_fiscal_text" maxlength="30" name="nota_fiscal_numero" type="text" />
+			<div class="controls">           
+				{{form.nota_fiscal_numero}}
 				<input class="btn" id="pesquisa_nota_fiscal" name="pesquisa_nota_fiscal" type="button" value="Pesquisar" />
 			</div>
 		</div>
 
 		<div class="list_materiais_nota_fiscal"></div>
-		   
+		
+		<div class="control-group  field-numero_of">
+			<div class="control-label"><label for="nota_fiscal" class="required">Data Inicial:</label></div>
+			<div class="controls">
+				   
+				<input type="text" name="some_name" value="{% csrf_token %}" id="some_name">
+			</div>
+		</div>
 		
     {% block field_sets %}
     {% for fieldset in adminform %}
