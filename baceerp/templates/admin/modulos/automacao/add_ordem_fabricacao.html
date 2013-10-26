@@ -63,7 +63,8 @@
     {% endblock %}
     <form action="/automacao/ordemfabricacao/add/gera_ordem_fabricacao" method="post" id="{{ opts.module_name }}_form" class="form_gera_ordem_fabricacao form-horizontal well">
 	
-			<input type="hidden" name="csrfmiddlewaretoken" id="csrfmiddlewaretoken" value="a3e0c8ebc18ed8df670af60d18443e3f" />
+			{% csrf_token %}
+			{{ form.non_field_errors }}
 
     {% if is_popup %}<input type="hidden" name="_popup" value="1" />{% endif %}
 
@@ -78,6 +79,7 @@
 		<div class="control-group  field-numero_of">
 			<div class="control-label"><label for="nota_fiscal" class="required">Nota Fiscal:</label></div>
 			<div class="controls">           
+				{{form.nota_fiscal_numero.errors}}
 				{{form.nota_fiscal_numero}}
 				<input class="btn" id="pesquisa_nota_fiscal" name="pesquisa_nota_fiscal" type="button" value="Pesquisar" />
 			</div>
@@ -88,8 +90,7 @@
 		<div class="control-group  field-numero_of">
 			<div class="control-label"><label for="nota_fiscal" class="required">Data Inicial:</label></div>
 			<div class="controls">
-				   
-				<input type="text" name="some_name" value="{% csrf_token %}" id="some_name">
+				   {{form.data_inicial}}               
 			</div>
 		</div>
 		
