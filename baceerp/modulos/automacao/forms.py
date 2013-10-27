@@ -3,7 +3,7 @@ from django import forms
 from django.contrib.admin import widgets
 from django.db.models import Q
 from django.forms import ModelForm
-from models import OrdemFabricacao
+from models import OrdemFabricacao, EtiquetaRemessa
 from django.contrib.admin.widgets import AdminDateWidget 
 
 class FormOrdemFabricacao(forms.Form):
@@ -11,3 +11,8 @@ class FormOrdemFabricacao(forms.Form):
   data_inicial = forms.DateField(widget=AdminDateWidget)
   class Meta:
     model = OrdemFabricacao
+
+class FormEtiqueta(forms.Form):
+  ordem_fabricacao = forms.TextInput()
+  class Meta:
+    model = EtiquetaRemessa

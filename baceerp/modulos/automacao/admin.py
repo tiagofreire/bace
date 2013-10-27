@@ -14,6 +14,7 @@ from django.shortcuts import render
 
 from forms import *
 from models import *
+from django.http.response import HttpResponse
 
 
 class InlineNotaFiscal(TabularInline):
@@ -50,12 +51,15 @@ class EtiquetaAdmin(admin.ModelAdmin):
     js = ('admin/js/automacao.etiqueta.js',)
 
   fieldsets = [
-        ('Remessa', {'fields': ['tipo_etiqueta','numero_etiqueta_remessa','produto','ordem_fabricacao','peso','previsao','data_inicio','peso_1g']}),
+        ('Remessa', {'fields': ['display_meta','tipo_etiqueta','numero_etiqueta_remessa','produto','ordem_fabricacao','peso','previsao','data_inicio','peso_1g']}),
     ]
   list_filter = ('numero_etiqueta_remessa','tipo_etiqueta') 
   list_display = ('numero_etiqueta_remessa','ordem_fabricacao','tipo_etiqueta')
-  search_fields = ('numero_etiqueta_remessa','ordem_fabricacao__numero_of','tipo_etiqueta') 
+  search_fields = ('numero_etiqueta_remessa','ordem_fabricacao__numero_of','tipo_etiqueta')
   
+  
+  
+#   Ao clicar no botão de adicionar ele zera o inline
   @csrf_protect_m
   @transaction.commit_on_success
   def add_view(self, request, form_url='', extra_context=None):
@@ -68,13 +72,10 @@ class EtiquetaAdmin(admin.ModelAdmin):
   def change_view(self, request, object_id, form_url='', extra_context=None):
     etf = EtiquetaRemessa.objects.get(pk=object_id)
     self.readonly_fields = ('tipo_etiqueta','numero_etiqueta_remessa','produto','ordem_fabricacao','peso','previsao','data_inicio','peso_1g',)
-    print str(etf.tipo_etiqueta)+"############"
     if etf.tipo_etiqueta == "0":
       self.inlines = [EtiquetaRetornoRaioInline]
     elif etf.tipo_etiqueta == "1":  
       self.inlines = [EtiquetaRetnornoNipleInline]
-    elif etf.tipo_etiqueta == "":
-      self.inlines = []  
     return admin.ModelAdmin.change_view(self, request, object_id, form_url=form_url, extra_context=extra_context)
       
       
