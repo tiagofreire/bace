@@ -51,7 +51,7 @@ class EtiquetaAdmin(admin.ModelAdmin):
     js = ('admin/js/automacao.etiqueta.js',)
 
   fieldsets = [
-        ('Remessa', {'fields': ['display_meta','tipo_etiqueta','numero_etiqueta_remessa','produto','ordem_fabricacao','peso','previsao','data_inicio','peso_1g']}),
+        ('Remessa', {'fields': ['tipo_etiqueta','numero_etiqueta_remessa','produto','ordem_fabricacao','peso','previsao','data_inicio','peso_1g']}),
     ]
   list_filter = ('numero_etiqueta_remessa','tipo_etiqueta') 
   list_display = ('numero_etiqueta_remessa','ordem_fabricacao','tipo_etiqueta')
@@ -76,6 +76,8 @@ class EtiquetaAdmin(admin.ModelAdmin):
       self.inlines = [EtiquetaRetornoRaioInline]
     elif etf.tipo_etiqueta == "1":  
       self.inlines = [EtiquetaRetnornoNipleInline]
+    elif etf.tipo_etiqueta == "":
+      self.inlines = []  
     return admin.ModelAdmin.change_view(self, request, object_id, form_url=form_url, extra_context=extra_context)
       
       
