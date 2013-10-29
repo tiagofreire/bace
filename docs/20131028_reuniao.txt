@@ -1,0 +1,8 @@
+- por TODOS OS CAMPOS DE TEXTO para UPPERCASE
+
+# automacao
+- o VALOR TOTAL deve ser a soma do PESO e não do VALOR. VALOR TOTAL é a quantidade do peso que deverá ser subtraído a cada utilização de material.
+- todos os incrementos começarem do 1 e não do 0(ordem de fabricação e etiquetas)
+
+	- Ordem de Fabricação
+	  - Peso bruto deve subtrair do VALOR TOTAL da OF (QUE NA VERDADE É PESO E NÃO VALOR!!!)
