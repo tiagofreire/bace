@@ -59,7 +59,7 @@ class EtiquetaAdmin(admin.ModelAdmin):
   
   
   
-#   Ao clicar no botão de adicionar ele zera o inline
+  #Ao clicar no botão de adicionar ele zera o inline
   @csrf_protect_m
   @transaction.commit_on_success
   def add_view(self, request, form_url='', extra_context=None):
@@ -67,6 +67,8 @@ class EtiquetaAdmin(admin.ModelAdmin):
     self.readonly_fields = ()
     return admin.ModelAdmin.add_view(self, request, form_url=form_url, extra_context=extra_context)
   
+  #Método para sobrescrever a chamada de edição
+  #Ao chamar ele adiciona o EtiquetaRetorno de acordo com o tipo de EtiquetaRemessa  
   @csrf_protect_m
   @transaction.commit_on_success
   def change_view(self, request, object_id, form_url='', extra_context=None):
