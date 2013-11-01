@@ -8,7 +8,7 @@ var NotaFiscal = {
 				}
 			}
 		}
-		return arraySum.toFixed(2);
+		return arraySum.toFixed(3);
 	},
 	init : function(){              
 		var vv = [];
@@ -16,17 +16,17 @@ var NotaFiscal = {
 		//if (jQuery("#id_valor_total").val()=="") {jQuery("#id_valor_total").val(vv)};  
 		//jQuery("#id_valor_total").attr("disabled","true");   
 		setInterval(function(){    
-			jQuery.each(jQuery('.field-valor input'), function(k,v){   
+			jQuery.each(jQuery('.field-peso input'), function(k,v){   
 				if (jQuery(v).val() != "") {
 					vv[k] = parseFloat(jQuery(v).val());   
 				} 
 			});
-			jQuery("#id_valor_total").val(NotaFiscal.somaValoresArray(vv));    
+			jQuery("#id_peso_total").val(NotaFiscal.somaValoresArray(vv));    
 		},500);
 		    
-		jQuery(".field-valor input, #id_valor_total, .field-peso input").maskMoney({decimal:".",thousands:"", precision:2})
+		jQuery(".field-valor input, #id_peso_total, .field-peso input").maskMoney({decimal:".",thousands:"", precision:3})
 		jQuery(".add-row a").live("click",function(){
-			jQuery(".field-valor input, #id_valor_total, .field-peso input").maskMoney({decimal:".",thousands:"", precision:2});
+			jQuery(".field-valor input, #id_peso_total, .field-peso input").maskMoney({decimal:".",thousands:"", precision:3});
 		})
 	}   
 };

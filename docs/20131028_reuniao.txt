@@ -6,3 +6,12 @@
 
 	- Ordem de Fabricação
 	  - Peso bruto deve subtrair do VALOR TOTAL da OF (QUE NA VERDADE É PESO E NÃO VALOR!!!)
+	
+	- Etquetas
+		- Colocar máscaras de valor float
+		- PESO 1G não é obrigatório
+		- PRODUTO sempre será o mesmo da OF **
+		
+		- Remessa
+			- PREVISÃO = PESO/PESO 1G(COM UMA CASA DECIMAL NO RESULTADO)
+		

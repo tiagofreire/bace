@@ -25,7 +25,8 @@ class InlineNotaFiscal(TabularInline):
 class NotaFiscalAdmin(admin.ModelAdmin):
   class Media:
     js = ('admin/js/automacao.notafiscal.js',)
-    
+
+  readonly_fields = ('peso_total_inicial',)
   inlines = [InlineNotaFiscal]   
   search_fields = ('numero',)    
 
@@ -71,7 +72,7 @@ class EtiquetaAdmin(admin.ModelAdmin):
   @transaction.commit_on_success
   def change_view(self, request, object_id, form_url='', extra_context=None):
     etf = EtiquetaRemessa.objects.get(pk=object_id)
-    self.readonly_fields = ('tipo_etiqueta','numero_etiqueta_remessa','produto','ordem_fabricacao','peso','previsao','data_inicio','peso_1g',)
+    self.readonly_fields = ('tipo_etiqueta','numero_etiqueta_remessa','produto','ordem_fabricacao','data_inicio',)
     if etf.tipo_etiqueta == "0":
       self.inlines = [EtiquetaRetornoRaioInline]
     elif etf.tipo_etiqueta == "1":  
@@ -83,6 +84,9 @@ class EtiquetaAdmin(admin.ModelAdmin):
       
   
 class OrdemFabricacaoAdmin(admin.ModelAdmin):
+  class Media:
+    js = ('admin/js/automacao.ordemfabricacao.js',)
+
   search_fields = ('numero_of',)
   list_display = ('numero_of','material',)
   change_list_template = "admin/modulos/automacao/list_ordem_fabricacao.html"    

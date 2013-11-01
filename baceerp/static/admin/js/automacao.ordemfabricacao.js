@@ -47,6 +47,8 @@ var OrdemFabricacao = {
   	jQuery(".add-row a").live("click",function(){
   		jQuery(".field-valor input, #id_valor_total, .field-peso input").maskMoney({decimal:".",thousands:"", precision:2});
   	});
+  	
+  	jQuery("#id_peso_bruto,#id_peso_liquido,#id_previsao,#id_perda").maskMoney({decimal:".",thousands:"", precision:2})
   }
 }
 

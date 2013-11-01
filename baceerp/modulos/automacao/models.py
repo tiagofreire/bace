@@ -9,13 +9,15 @@ class NotaFiscal(models.Model):
     verbose_name_plural = "Notas Fiscais"
     
   numero = models.CharField(u"Número", max_length=100,blank=False,null=False, unique=True)
-  valor_total = models.DecimalField(u"Valor Total", max_digits=8,decimal_places=2)
+  peso_total = models.DecimalField(u"Valor Total",help_text="Soma peso de todos os materiais", max_digits=8,decimal_places=2)
+  peso_total_inicial = models.DecimalField(u"Valor Total Inicial",max_digits=8,decimal_places=2)
   
   def __unicode__(self):
     return self.numero
-  # def save(self, *args, **kwargs):
-  #   nota_material = MaterialNotaFiscal.objects.filter(nota_fiscal=self.numero)
-  #   print nota_material         
+
+  def save(self, *args, **kwargs):
+    self.peso_total_inicial = self.peso_total 
+    super(NotaFiscal, self).save(*args, **kwargs)         
        
 class MaterialNotaFiscal(models.Model):
   STATUS_MATERIAL = (
@@ -25,7 +27,7 @@ class MaterialNotaFiscal(models.Model):
    )  
   nota_fiscal = models.ForeignKey(NotaFiscal)
   material = models.ForeignKey(Material,blank=True,null=True)
-  volume = models.PositiveSmallIntegerField(u"Volume", default=0,blank=False,null=False)
+  volume = models.PositiveSmallIntegerField(u"Volume",blank=False,null=False)
   data_entrada = models.DateField(u"Data de Entrada", max_length=100,blank=False,null=False)
   peso = models.DecimalField(u"Peso", max_length=100,max_digits=8,decimal_places=2,blank=False,null=False)
   valor = models.DecimalField(u"Valor", max_digits=8,decimal_places=2,blank=False,null=False)
@@ -65,6 +67,21 @@ class OrdemFabricacao(models.Model):
   def __unicode__(self):
     return self.numero_of
 
+  def save(self, *args, **kwargs):
+    import sys
+    nf = NotaFiscal.objects.get(numero=self.nota_fiscal)
+    nf.peso_total = str(int(nf.peso_total) - int(self.peso_bruto))
+    
+    print nf.peso_total
+    
+    sys.exit()
+    
+    
+    nf.save()
+    
+    
+    super(OrdemFabricacao, self).save(*args, **kwargs)           
+
       
 class EtiquetaRemessa(models.Model):
   TIPO_ETIQUETA = (
@@ -87,7 +104,7 @@ class EtiquetaRemessa(models.Model):
   def save(self, *args, **kwargs):
     quantidade_etiqueta_of = EtiquetaRemessa.objects.filter(ordem_fabricacao=self.ordem_fabricacao).count()
     print quantidade_etiqueta_of
-    self.numero_etiqueta_remessa = str(self.ordem_fabricacao.numero_of)+str(self.ALFABETO[quantidade_etiqueta_of+1])    
+    self.numero_etiqueta_remessa = str(self.ordem_fabricacao.numero_of)+str(self.ALFABETO[quantidade_etiqueta_of])    
     print self.numero_etiqueta_remessa
     super(EtiquetaRemessa, self).save(*args, **kwargs) 
 
