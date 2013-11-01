@@ -1,6 +1,7 @@
 #-*- coding: utf-8 -*-
 from django.db import models
 from baceerp.modulos.geral.models import Material, Produto, Operador
+from django.db.models.aggregates import Max
 
 
 class NotaFiscal(models.Model):
@@ -99,6 +100,7 @@ class EtiquetaRemessa(models.Model):
   ordem_fabricacao = models.ForeignKey(OrdemFabricacao)
   peso_1g = models.DecimalField(u"Peso 1g", max_length=100,max_digits=8,decimal_places=2,blank=False,null=False)
   produto = models.ForeignKey(Produto)
+  ordem_fabricacao_nof =  models.CharField(max_length = 100, null=True)
   
   vol = 1
   def save(self, *args, **kwargs):
