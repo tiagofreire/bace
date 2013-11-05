@@ -5,7 +5,7 @@ var OrdemFabricacao = {
 					"csrfmiddlewaretoken" :jQuery("input[name='csrfmiddlewaretoken']").val()
 			}, function(r){
 			jQuery(".list_materiais_nota_fiscal").html(r);
-			jQuery("#id_nota_fiscal option[value='"+jQuery("#nota_fiscal_pk").val()+"']").attr('selected','selected')
+			//jQuery("#id_nota_fiscal option[value='"+jQuery("#nota_fiscal_pk").val()+"']").attr('selected','selected')
 
 		});
   },   
@@ -19,7 +19,7 @@ var OrdemFabricacao = {
     if (jQuery(element).attr("checked") == "checked")
       jQuery("#id_materia_nota_fiscal option[value='"+id+"']").attr("selected",true);
     else
-      jQuery("#id_materia_nota_fiscal option[value='"+id+"']").attr("selected",false);
+      jQuery("#id_materia_nota_fiscal option[value='"+id+"']").attr("selected",false);  
   },  
   carregaSelectVolumeMaterial : function(div,qtd){   
     jQuery.each(jQuery("#list_material_nota_fical select").size(), function(k,v){
