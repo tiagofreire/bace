@@ -35,6 +35,7 @@ class MaterialNotaFiscalAdmin(admin.ModelAdmin):
   
 
 class EtiquetaInline(admin.StackedInline):
+  exclude = ('numero_etiqueta_remessa',)
   model = EtiquetaRemessa
   extra = 1
   fk_name = "ordem_fabricacao"      
@@ -89,6 +90,7 @@ class OrdemFabricacaoAdmin(admin.ModelAdmin):
   class Media:
     js = ('admin/js/automacao.ordemfabricacao.js',)
 
+  readonly_fields = ('material','numero_of',)
   search_fields = ('numero_of',)
   list_display = ('numero_of','material',)
   change_list_template = "admin/modulos/automacao/list_ordem_fabricacao.html"    

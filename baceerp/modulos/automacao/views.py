@@ -63,7 +63,7 @@ def gera_ordem_fabricacao(request):
   material_nota_fiscal = MaterialNotaFiscal.objects.get(id=request.POST["materia_nota_fiscal_id"])  
   nota_fiscal = NotaFiscal.objects.get(id=request.POST["nota_fiscal_pk"])
 
-  for x in range(1,int(request.POST["material_nota_fiscal_volume_"+request.POST["materia_nota_fiscal_id"]])):
+  for x in range(1,int(request.POST["material_nota_fiscal_volume_"+request.POST["materia_nota_fiscal_id"]])+1):
     of = OrdemFabricacao(
       nota_fiscal=NotaFiscal.objects.get(id=request.POST["nota_fiscal_pk"]),
       numero_of=str(nota_fiscal.numero)+str(material_nota_fiscal.material.codigo)+str(x),
