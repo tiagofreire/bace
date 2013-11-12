@@ -80,7 +80,6 @@ def gera_ordem_fabricacao(request):
           'form': form,
       })
 
-  
 def add_etiqueta(request):  
   form = FormOrdemFabricacao()
   return render(request, "admin/modulos/automacao/add_ordem_fabricacao.html", {

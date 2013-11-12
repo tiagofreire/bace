@@ -37,6 +37,7 @@ class MaterialNotaFiscalAdmin(admin.ModelAdmin):
 
 class EtiquetaInline(admin.StackedInline):
   exclude = ('ativo','numero_etiqueta_remessa',)
+
   model = EtiquetaRemessa
   extra = 1
   fk_name = "ordem_fabricacao"      

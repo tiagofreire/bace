@@ -12,7 +12,7 @@ class NotaFiscal(models.Model):
     
   numero = models.CharField(u"Número", max_length=100,blank=False,null=False, unique=True)
   peso_total = models.FloatField(u"Valor Total",help_text="Soma peso de todos os materiais")
-  peso_total_inicial = models.FloatField(u"Valor Total Inicial")
+  peso_total_inicial = models.FloatField(u"Valor Total Inicial")<<<<<<< HEAD
   ativo = models.BooleanField(default=False)
   
   def __unicode__(self):
@@ -90,6 +90,7 @@ class OrdemFabricacao(models.Model):
 
   def save(self, *args, **kwargs):
     import sys      
+
     if self.id != None and self.ativo is False:
       mnf = MaterialNotaFiscal.objects.get(nota_fiscal__numero = self.nota_fiscal)
       mnf.peso = round((mnf.peso-self.peso_bruto),2)
