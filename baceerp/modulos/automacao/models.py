@@ -12,7 +12,7 @@ class NotaFiscal(models.Model):
     
   numero = models.CharField(u"Número", max_length=100,blank=False,null=False, unique=True)
   peso_total = models.FloatField(u"Valor Total",help_text="Soma peso de todos os materiais")
-  peso_total_inicial = models.FloatField(u"Valor Total Inicial")<<<<<<< HEAD
+  peso_total_inicial = models.FloatField(u"Valor Total Inicial")
   ativo = models.BooleanField(default=False)
   
   def __unicode__(self):
