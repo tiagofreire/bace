@@ -1,7 +1,9 @@
 #-*- coding: utf-8 -*-
 from django.db import models
-from baceerp.modulos.geral.models import Material, Produto, Operador
-
+from baceerp.modulos.geral.models import Material, Produto, Operador, Previsao
+from django.db.models.aggregates import Max
+from django.utils.numberformat import format
+from django.template.defaultfilters import default
 
 class NotaFiscal(models.Model):
   class Meta:
@@ -9,15 +11,12 @@ class NotaFiscal(models.Model):
     verbose_name_plural = "Notas Fiscais"
     
   numero = models.CharField(u"Número", max_length=100,blank=False,null=False, unique=True)
-  peso_total = models.DecimalField(u"Valor Total",help_text="Soma peso de todos os materiais", max_digits=8,decimal_places=2)
-  peso_total_inicial = models.DecimalField(u"Valor Total Inicial",max_digits=8,decimal_places=2)
+  peso_total = models.FloatField(u"Valor Total",help_text="Soma peso de todos os materiais")
+  peso_total_inicial = models.FloatField(u"Valor Total Inicial")
+  ativo = models.BooleanField(default=False)
   
   def __unicode__(self):
     return self.numero
-
-  def save(self, *args, **kwargs):
-    self.peso_total_inicial = self.peso_total 
-    super(NotaFiscal, self).save(*args, **kwargs)         
        
 class MaterialNotaFiscal(models.Model):
   STATUS_MATERIAL = (
@@ -26,13 +25,15 @@ class MaterialNotaFiscal(models.Model):
      ("2", "Finalizado"),
    )  
   nota_fiscal = models.ForeignKey(NotaFiscal)
-  material = models.ForeignKey(Material,blank=True,null=True)
-  volume = models.PositiveSmallIntegerField(u"Volume",blank=False,null=False)
+  material = models.ForeignKey(Material,blank=False,null=False)
+  volume = models.IntegerField(u"Volume",blank=False,null=False)
   data_entrada = models.DateField(u"Data de Entrada", max_length=100,blank=False,null=False)
-  peso = models.DecimalField(u"Peso", max_length=100,max_digits=8,decimal_places=2,blank=False,null=False)
-  valor = models.DecimalField(u"Valor", max_digits=8,decimal_places=2,blank=False,null=False)
+  peso = models.FloatField(u"Peso",blank=False,null=False)
+  peso_inicial = models.FloatField(blank=False,null=False)
+  valor = models.FloatField(u"Valor",blank=False,null=False)
   status = models.CharField("Status",max_length=100, choices=STATUS_MATERIAL,blank=True,null=True)
-
+  ativo = models.BooleanField()
+  
   class Meta:
     verbose_name = "Material"
     verbose_name_plural = "Materiais"   
@@ -41,6 +42,13 @@ class MaterialNotaFiscal(models.Model):
     return self.material.descricao
 
   def save(self, *args, **kwargs):
+    self.peso_inicial = self.peso
+    nf = NotaFiscal.objects.get(numero = self.nota_fiscal.numero)
+    nf.peso_total = nf.peso_total + self.peso
+    nf.peso_total_inicial = nf.peso_total_inicial + self.peso_inicial
+    nf.ativo = True
+    nf.save() 
+    
     self.status = self.STATUS_MATERIAL[0][0]
     super(MaterialNotaFiscal, self).save(*args, **kwargs)           
                                               
@@ -59,29 +67,36 @@ class OrdemFabricacao(models.Model):
   operador = models.ForeignKey(Operador,blank=True,null=True)
   data_inicial = models.DateField(u"Data Inicial", max_length=100,blank=True,null=True)
   data_final = models.DateField(u"Data Final", max_length=100,blank=True,null=True)
-  peso_bruto = models.DecimalField(u"Peso Bruto", max_length=100,max_digits=8,decimal_places=2,blank=True,null=True)
-  peso_liquido = models.DecimalField(u"Peso Líquido", max_length=100,max_digits=8,decimal_places=2,blank=True,null=True)
-  previsao = models.DecimalField(u"Previsão", max_length=100,max_digits=8,decimal_places=2,blank=True,null=True)
-  perda = models.DecimalField(u"Perda", max_length=100,max_digits=8,decimal_places=2,blank=True,null=True)
-
+  peso_bruto = models.FloatField("Peso Bruto",blank=True,null=True)
+  peso_liquido = models.FloatField(u"Peso Líquido",blank=True,null=True)
+  previsao = models.ForeignKey(Previsao,blank=True,null=True)
+  perda = models.FloatField(u"Perda",blank=True,null=True)
+  ativo = models.BooleanField(default=False)
+  
   def __unicode__(self):
     return self.numero_of
 
-  def save(self, *args, **kwargs):
-    import sys
-    nf = NotaFiscal.objects.get(numero=self.nota_fiscal)
-    nf.peso_total = str(int(nf.peso_total) - int(self.peso_bruto))
-    
-    print nf.peso_total
-    
-    sys.exit()
-    
-    
-    nf.save()
-    
-    
-    super(OrdemFabricacao, self).save(*args, **kwargs)           
+#   def save(self, *args, **kwargs):
+#     import sys      
+#     nota_fiscal = NotaFiscal.objects.get(numero=self.nota_fiscal)
+#     if self.id != None:
+#       mnf = MaterialNotaFiscal.objects.filter(ordem_fabricacao_id=self.numero_of)
+#       if self.peso_bruto == "":
+#         mnf.ordem_fabricacao_id = self.id
+#         nota_fiscal.peso_total = round((nf.peso_total-self.peso_bruto),2)
+#         nota_fiscal.save()  
+# 
+#     super(OrdemFabricacao, self).save(*args, **kwargs)           
 
+  def save(self, *args, **kwargs):
+    import sys      
+    if self.id != None and self.ativo is False:
+      mnf = MaterialNotaFiscal.objects.get(nota_fiscal__numero = self.nota_fiscal)
+      mnf.peso = round((mnf.peso-self.peso_bruto),2)
+      mnf.save()
+      self.ativo = True
+
+    super(OrdemFabricacao, self).save(*args, **kwargs)           
       
 class EtiquetaRemessa(models.Model):
   TIPO_ETIQUETA = (
@@ -92,13 +107,14 @@ class EtiquetaRemessa(models.Model):
   ALFABETO = ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z']
    
   numero_etiqueta_remessa = models.CharField(u"Etiqueta",max_length=100,blank=False,null=False)  
-  peso = models.DecimalField(u"Peso", max_length=100,max_digits=8,decimal_places=2,blank=False,null=False)
+  peso = models.FloatField(u"Peso",blank=False,null=False)
   tipo_etiqueta = models.CharField("Tipo de Etiqueta",max_length=100, choices=TIPO_ETIQUETA,blank=False,null=False)
-  previsao = models.DecimalField(u"Previsão", max_length=100,max_digits=8,decimal_places=2,blank=True,null=True)
+  previsao = models.ForeignKey(Previsao,blank=False,null=False)
   data_inicio = models.DateField(u"Data de Início", max_length=100,blank=False,null=False)
   ordem_fabricacao = models.ForeignKey(OrdemFabricacao)
-  peso_1g = models.DecimalField(u"Peso 1g", max_length=100,max_digits=8,decimal_places=2,blank=False,null=False)
+  peso_1g = models.FloatField(u"Peso 1g",blank=False,null=False)
   produto = models.ForeignKey(Produto)
+  ativo = models.BooleanField()
   
   vol = 1
   def save(self, *args, **kwargs):
@@ -121,23 +137,25 @@ class EtiquetaRetorno(models.Model):
     
     
 class EtiquetaRetornoRaio(EtiquetaRetorno):
-  peso_desengraxado = models.DecimalField(u"Peso Desengraxado", max_length=100,max_digits=8,decimal_places=2,blank=False,null=False)
-  peso_1g = models.DecimalField(u"Peso 1g", max_length=100,max_digits=8,decimal_places=2,blank=False,null=False)
-  peso_polido = models.DecimalField(u"Peso Polido", max_length=100,max_digits=8,decimal_places=2,blank=False,null=False)
-  quantidade = models.CharField("Quantidade",max_length=100,blank=False,null=False)
+  peso_desengraxado = models.FloatField(u"Peso Desengraxado",blank=False,null=False)
+  peso_1g = models.FloatField(u"Peso 1g", blank=False,null=False)
+  peso_polido = models.FloatField(u"Peso Polido", blank=False,null=False)
+  quantidade = models.FloatField("Quantidade",max_length=100,blank=False,null=False)
   data = models.DateField(u"Data", max_length=100,blank=False,null=False)
   responsavel = models.CharField(u"Responsável",max_length=100,blank=False,null=False)
-    
+  ativo = models.BooleanField()
     
 class EtiquetaRetornoNiple(EtiquetaRetorno):
-  peso_rosqueado = models.DecimalField(u"Peso Rosqueado", max_length=100,max_digits=8,decimal_places=2,blank=False,null=False)
-  peso_1g = models.DecimalField(u"Peso 1g", max_length=100,max_digits=8,decimal_places=2,blank=False,null=False)
+  peso_rosqueado = models.CharField(u"Peso Rosqueado", max_length=100,blank=False,null=False)
+  peso_1g = models.FloatField(u"Peso 1g",blank=False,null=False)
   data_peso_rosqueado = models.DateField(u"Data Rosqueado", max_length=100,blank=False,null=False)
-  quantidade_peso_rosqueado = models.CharField("Quantidade Peso Rosqueado",max_length=100,blank=False,null=False)
-  peso_niquelado = models.DecimalField(u"Peso Niquelado", max_length=100,max_digits=8,decimal_places=2,blank=False,null=False)
+  quantidade_peso_rosqueado = models.IntegerField("Quantidade Peso Rosqueado",blank=False,null=False)
+  peso_niquelado = models.FloatField(u"Peso Niquelado",blank=False,null=False)
   data_peso_niquelado = models.DateField(u"Data Niquelado", max_length=100,blank=False,null=False)
-  quantidade_peso_niquelado = models.CharField("Quantidade Peso Niquelado",max_length=100,blank=False,null=False)
-  peso_embalado = models.DecimalField(u"Peso Embalado", max_length=100,max_digits=8,decimal_places=2,blank=False,null=False)
+  quantidade_peso_niquelado = models.IntegerField("Quantidade Peso Niquelado",blank=False,null=False)
+  peso_embalado = models.FloatField(u"Peso Embalado", blank=False,null=False)
   data_peso_niquelado = models.DateField(u"Data Embalado", max_length=100,blank=False,null=False)
-  quantidade_peso_niquelado = models.CharField("Quantidade Peso Embalado",max_length=100,blank=False,null=False)
+  quantidade_peso_niquelado = models.IntegerField("Quantidade Peso Embalado",blank=False,null=False)
   responsavel = models.CharField(u"Responsável",max_length=100,blank=False,null=False)
+  ativo = models.BooleanField()
+  

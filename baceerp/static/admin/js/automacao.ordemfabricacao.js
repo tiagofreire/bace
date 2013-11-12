@@ -5,7 +5,7 @@ var OrdemFabricacao = {
 					"csrfmiddlewaretoken" :jQuery("input[name='csrfmiddlewaretoken']").val()
 			}, function(r){
 			jQuery(".list_materiais_nota_fiscal").html(r);
-			jQuery("#id_nota_fiscal option[value='"+jQuery("#nota_fiscal_pk").val()+"']").attr('selected','selected')
+			//jQuery("#id_nota_fiscal option[value='"+jQuery("#nota_fiscal_pk").val()+"']").attr('selected','selected')
 
 		});
   },   
@@ -19,7 +19,7 @@ var OrdemFabricacao = {
     if (jQuery(element).attr("checked") == "checked")
       jQuery("#id_materia_nota_fiscal option[value='"+id+"']").attr("selected",true);
     else
-      jQuery("#id_materia_nota_fiscal option[value='"+id+"']").attr("selected",false);
+      jQuery("#id_materia_nota_fiscal option[value='"+id+"']").attr("selected",false);  
   },  
   carregaSelectVolumeMaterial : function(div,qtd){   
     jQuery.each(jQuery("#list_material_nota_fical select").size(), function(k,v){
@@ -29,11 +29,25 @@ var OrdemFabricacao = {
     for(var x=1;x<=qtd;x++){jQuery("#volumeMaterial").append("<option value=\""+x+"\">"+x+"</option>");}
   },
   init : function(){
+	  
+	  $(document).keypress(function(e) {
+		    if(e.which == 13) {
+		    	jQuery(".btn_gera_ordem_fabricacao").click();
+		    	return false;
+		    }
+		});
+	  
+	  
+	jQuery("a[href='automacao/ordemfabricacao/add/']").attr("href","automacao/ordemfabricacao/add/add_ordem_fabricacao")
     //OrdemFabricacao.carregaNota();
   	jQuery("#pesquisa_nota_fiscal").click(function(){
   		OrdemFabricacao.carregaMaterialNotaFiscal();
    	});                   
    	jQuery(".btn_gera_ordem_fabricacao").click(function(){
+   	  if (jQuery("#id_nota_fiscal_numero").val()==""){
+   		  jQuery(".list_materiais_nota_fiscal").html("<p class=\"errornote alert alert-error fade in\">Nenhuma nota fiscal cadastrada com este número</p>");
+   		  return false;
+   	  }
    	  jQuery(".form_gera_ordem_fabricacao").submit()
    	})
    	setTimeout(function(){                              

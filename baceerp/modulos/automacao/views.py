@@ -40,7 +40,7 @@ def pesquisa_nota_fiscal(request):
       html += "<td>"+str(m.volume)+"<input type=\"hidden\" value=\""+str(m.volume)+"\" name=\"material_nota_fiscal_volume_"+str(m.id)+"\" id=\"material_nota_fiscal_volume_"+str(m.id)+"\"/></td>"
       html += "<td>"+m.data_entrada.strftime("%d/%m/%Y")+"</td>"
       html += "<td>"+str(m.peso)+"</td><td>"+str(m.valor)+"</td>"
-      html += "<td><input type=\"radio\" onchange=\"OrdemFabricacao.selecionaProdutoNotaFiscal(this,"+str(m.id)+")\" name=\"materia_nota_fiscal_id\" id=\"materia_nota_fiscal_"+str(m.id)+"\" value=\""+str(m.id)+"\"/></td>" if m.volume != 0 else "<td></td>"
+      html += "<td><input type=\"radio\" name=\"materia_nota_fiscal_id\" id=\"materia_nota_fiscal_"+str(m.id)+"\" value=\""+str(m.id)+"\"/></td>" if m.volume != 0 else "<td></td>"
       html += "</tr>"
     html += "</tbody>"
     html += "</table>\
@@ -52,27 +52,34 @@ def pesquisa_nota_fiscal(request):
   
 def add_ordem_fabricacao(request):  
   form = FormOrdemFabricacao()
-  return render(request, "admin/modulos/automacao/add_ordem_fabricacao.html", {
+  return render(request, "admin/modulos/automacao/ordemfabricacao/add_ordem_fabricacao.html", {
           'form': form,
       })
   
 def gera_ordem_fabricacao(request):
-  form = FormOrdemFabricacao(request.POST) 
+  if request.method == 'POST': # If the form has been submitted...
+    form = FormOrdemFabricacao(request.POST) 
+    
+    if request.POST["materia_nota_fiscal_id"]:
+      material_nota_fiscal = MaterialNotaFiscal.objects.get(id=request.POST["materia_nota_fiscal_id"])  
+      nota_fiscal = NotaFiscal.objects.get(id=request.POST["nota_fiscal_pk"])
+    
+      for x in range(1,int(request.POST["material_nota_fiscal_volume_"+request.POST["materia_nota_fiscal_id"]])+1):
+        of = OrdemFabricacao(
+          nota_fiscal=NotaFiscal.objects.get(id=request.POST["nota_fiscal_pk"]),
+          numero_of=str(nota_fiscal.numero)+str(material_nota_fiscal.material.codigo)+str(x),
+          material=material_nota_fiscal
+          )
+        of.save()     
+      material_nota_fiscal.volume=0
+      material_nota_fiscal.save()
+      return HttpResponseRedirect("/automacao/ordemfabricacao/")
+  else:
+    form = FormOrdemFabricacao()
+  return render(request, "admin/modulos/automacao/ordemfabricacao/add_ordem_fabricacao.html", {
+          'form': form,
+      })
 
-  import sys           
-  material_nota_fiscal = MaterialNotaFiscal.objects.get(id=request.POST["materia_nota_fiscal_id"])  
-  nota_fiscal = NotaFiscal.objects.get(id=request.POST["nota_fiscal_pk"])
-
-  for x in range(1,int(request.POST["material_nota_fiscal_volume_"+request.POST["materia_nota_fiscal_id"]])):
-    of = OrdemFabricacao(
-      nota_fiscal=NotaFiscal.objects.get(id=request.POST["nota_fiscal_pk"]),
-      numero_of=str(nota_fiscal.numero)+str(material_nota_fiscal.material.codigo)+str(x),
-      material=material_nota_fiscal
-      )
-    of.save()     
-  material_nota_fiscal.volume=0
-  material_nota_fiscal.save()
-  return HttpResponseRedirect("/automacao/ordemfabricacao/")
   
 def add_etiqueta(request):  
   form = FormOrdemFabricacao()

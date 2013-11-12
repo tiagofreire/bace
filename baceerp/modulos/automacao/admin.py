@@ -26,15 +26,17 @@ class NotaFiscalAdmin(admin.ModelAdmin):
   class Media:
     js = ('admin/js/automacao.notafiscal.js',)
 
-  readonly_fields = ('peso_total_inicial',)
-  inlines = [InlineNotaFiscal]   
+  inlines = [InlineNotaFiscal]
+  readonly_fields = ('peso_total_inicial',)   
   search_fields = ('numero',)    
+  exclude = ('ativo',)
 
 class MaterialNotaFiscalAdmin(admin.ModelAdmin):
-  exclude = ('status','ordem_fabricacao',)
+  exclude = ('ativo','status','ordem_fabricacao',)
   
 
 class EtiquetaInline(admin.StackedInline):
+  exclude = ('ativo','numero_etiqueta_remessa',)
   model = EtiquetaRemessa
   extra = 1
   fk_name = "ordem_fabricacao"      
@@ -60,7 +62,7 @@ class EtiquetaAdmin(admin.ModelAdmin):
   
   
   
-#   Ao clicar no botão de adicionar ele zera o inline
+  #Ao clicar no botão de adicionar ele zera o inline
   @csrf_protect_m
   @transaction.commit_on_success
   def add_view(self, request, form_url='', extra_context=None):
@@ -68,6 +70,8 @@ class EtiquetaAdmin(admin.ModelAdmin):
     self.readonly_fields = ()
     return admin.ModelAdmin.add_view(self, request, form_url=form_url, extra_context=extra_context)
   
+  #Método para sobrescrever a chamada de edição
+  #Ao chamar ele adiciona o EtiquetaRetorno de acordo com o tipo de EtiquetaRemessa  
   @csrf_protect_m
   @transaction.commit_on_success
   def change_view(self, request, object_id, form_url='', extra_context=None):
@@ -87,11 +91,13 @@ class OrdemFabricacaoAdmin(admin.ModelAdmin):
   class Media:
     js = ('admin/js/automacao.ordemfabricacao.js',)
 
+  readonly_fields = ('material','numero_of',)
   search_fields = ('numero_of',)
   list_display = ('numero_of','material',)
-  change_list_template = "admin/modulos/automacao/list_ordem_fabricacao.html"    
+  change_list_template = "admin/modulos/automacao/ordemfabricacao/list_ordem_fabricacao.html"    
   list_per_page = 25   
-  inlines = [EtiquetaInline]  
+  inlines = [EtiquetaInline]
+  exclude = ('ativo',)  
   
 
 #admin.site.register(MaterialNotaFiscal,MaterialNotaFiscalAdmin)

@@ -4,11 +4,7 @@
 * version: 2.1.2
 * Licensed under the MIT license
 */                                          
-jQuery(function(){
-  jQuery('input[type="text"]').keydown(function(){
-    jQuery(this).val(jQuery(this).val().toUpperCase());
-  });
-});
+
 ;(function($) {
 	if(!$.browser){
 		$.browser = {};

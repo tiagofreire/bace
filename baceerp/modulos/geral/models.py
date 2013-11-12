@@ -78,3 +78,11 @@ class Produto(models.Model):
       produto_id = str(Produto.objects.all().count()+1)
     self.codigo = str(self.grupo_produto.id)+"."+produto_id
     super(Produto, self).save(*args, **kwargs)
+
+class Previsao(models.Model):
+  class Meta:
+    verbose_name = "Previsão"
+  descricao = models.CharField(u"Descrição",max_length=100,null=False,blank=False)
+
+  def __unicode__(self):
+    return self.descricao
