@@ -27,7 +27,7 @@ class NotaFiscalAdmin(admin.ModelAdmin):
     js = ('admin/js/automacao.notafiscal.js',)
 
   inlines = [InlineNotaFiscal]
-  readonly_fields = ('peso_total_inicial',)   
+  readonly_fields = ('peso_total_inicial','peso_total',)   
   search_fields = ('numero',)    
   exclude = ('ativo',)
 

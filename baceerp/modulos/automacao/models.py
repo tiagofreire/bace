@@ -11,8 +11,8 @@ class NotaFiscal(models.Model):
     verbose_name_plural = "Notas Fiscais"
     
   numero = models.CharField(u"Número", max_length=100,blank=False,null=False, unique=True)
-  peso_total = models.FloatField(u"Valor Total",help_text="Soma peso de todos os materiais")
-  peso_total_inicial = models.FloatField(u"Valor Total Inicial")
+  peso_total = models.FloatField(u"Valor Total",help_text="Soma peso de todos os materiais", default=0)
+  peso_total_inicial = models.FloatField(u"Valor Total Inicial", default=0)
   ativo = models.BooleanField(default=False)
   
   def __unicode__(self):
@@ -20,10 +20,10 @@ class NotaFiscal(models.Model):
        
 class MaterialNotaFiscal(models.Model):
   STATUS_MATERIAL = (
-     ("0","Em aberto"),
-     ("1", u"Para produção"),
-     ("2", "Finalizado"),
-   )  
+     ("0","EM_PRODUCAO"),
+     ("1", u"PARA_PRODUCAO"),
+     ("2", "FINALIZADO"),
+   ) 
   nota_fiscal = models.ForeignKey(NotaFiscal)
   material = models.ForeignKey(Material,blank=False,null=False)
   volume = models.IntegerField(u"Volume",blank=False,null=False)
@@ -42,14 +42,20 @@ class MaterialNotaFiscal(models.Model):
     return self.material.descricao
 
   def save(self, *args, **kwargs):
-    self.peso_inicial = self.peso
+    print "### CHEGANDO NO MODEL PRIMEIRO"
+    print self.status
     nf = NotaFiscal.objects.get(numero = self.nota_fiscal.numero)
-    nf.peso_total = nf.peso_total + self.peso
-    nf.peso_total_inicial = nf.peso_total_inicial + self.peso_inicial
-    nf.ativo = True
-    nf.save() 
+    if self.status is None:
+      print "### dentro do model"
+      self.status = u"EM_PRODUCAO"
+      self.peso_inicial = self.peso
+      nf.peso_total = nf.peso_total + self.peso
+      nf.peso_total_inicial = nf.peso_total_inicial + self.peso_inicial
+      nf.ativo = True
     
-    self.status = self.STATUS_MATERIAL[0][0]
+    print self.status
+    nf.save()
+    self.peso_inicial = self.peso
     super(MaterialNotaFiscal, self).save(*args, **kwargs)           
                                               
 
@@ -72,7 +78,7 @@ class OrdemFabricacao(models.Model):
   previsao = models.ForeignKey(Previsao,blank=True,null=True)
   perda = models.FloatField(u"Perda",blank=True,null=True)
   ativo = models.BooleanField(default=False)
-  
+  material_nota_fiscal_id = models.IntegerField(blank=True,null=True)
   def __unicode__(self):
     return self.numero_of
 
@@ -90,10 +96,13 @@ class OrdemFabricacao(models.Model):
 
   def save(self, *args, **kwargs):
     import sys      
-
+    print self.nota_fiscal
     if self.id != None and self.ativo is False:
-      mnf = MaterialNotaFiscal.objects.get(nota_fiscal__numero = self.nota_fiscal)
+      mnf = MaterialNotaFiscal.objects.get(id=self.material_nota_fiscal_id)
       mnf.peso = round((mnf.peso-self.peso_bruto),2)
+      nf = NotaFiscal.objects.get(numero=self.nota_fiscal.numero)
+      nf.peso_total = nf.peso_total-mnf.peso
+      nf.save()
       mnf.save()
       self.ativo = True
 

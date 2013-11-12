@@ -30,10 +30,11 @@ var OrdemFabricacao = {
   },
   init : function(){
 	  
-	  $(document).keypress(function(e) {
+	  jQuery(document).keypress(function(e) {
 		    if(e.which == 13) {
-		    	jQuery(".btn_gera_ordem_fabricacao").click();
-		    	return false;
+		    	
+	    		return false;					
+			
 		    }
 		});
 	  

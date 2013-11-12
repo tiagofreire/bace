@@ -60,7 +60,7 @@ def gera_ordem_fabricacao(request):
   if request.method == 'POST': # If the form has been submitted...
     form = FormOrdemFabricacao(request.POST) 
     
-    if request.POST["materia_nota_fiscal_id"]:
+    if "materia_nota_fiscal_id" in request.POST:
       material_nota_fiscal = MaterialNotaFiscal.objects.get(id=request.POST["materia_nota_fiscal_id"])  
       nota_fiscal = NotaFiscal.objects.get(id=request.POST["nota_fiscal_pk"])
     
@@ -68,10 +68,14 @@ def gera_ordem_fabricacao(request):
         of = OrdemFabricacao(
           nota_fiscal=NotaFiscal.objects.get(id=request.POST["nota_fiscal_pk"]),
           numero_of=str(nota_fiscal.numero)+str(material_nota_fiscal.material.codigo)+str(x),
-          material=material_nota_fiscal
+          material=material_nota_fiscal,
+          material_nota_fiscal_id=material_nota_fiscal.id
           )
         of.save()     
+      print "### CHEGANDO NA VIEW PRIMEIRO"
       material_nota_fiscal.volume=0
+      material_nota_fiscal.status = "PARA_PRODUCAO"
+      material_nota_fiscal.ativo=True
       material_nota_fiscal.save()
       return HttpResponseRedirect("/automacao/ordemfabricacao/")
   else:
