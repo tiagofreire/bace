@@ -45,6 +45,7 @@ class MaterialNotaFiscal(models.Model):
     print self.nota_fiscal.numero
     nf = NotaFiscal.objects.get(numero = self.nota_fiscal.numero)
     if self.status is None:
+      print "### dentro do model"
       self.status = u"EM_PRODUCAO"
       self.peso_inicial = self.peso
       nf.peso_total = nf.peso_total + self.peso

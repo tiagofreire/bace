@@ -50,7 +50,7 @@ class AutomacaoTest(TestCase):
     material_nota_fiscal_3 = MaterialNotaFiscal.objects.create(
         nota_fiscal = nota_fiscal,
         material = material,
-        volume = 10,
+        volume = ,
         data_entrada = timezone.now(),
         peso = 1000.0,
         peso_inicial = 1000.0,
