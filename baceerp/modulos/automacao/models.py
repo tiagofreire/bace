@@ -84,7 +84,6 @@ class OrdemFabricacao(models.Model):
 
   def save(self, *args, **kwargs):
     import sys      
-    print self.nota_fiscal
     if self.id != None and self.ativo is False:
       mnf = MaterialNotaFiscal.objects.get(id=self.material_nota_fiscal_id)
       mnf.peso = round((mnf.peso-self.peso_bruto),2)
@@ -93,7 +92,7 @@ class OrdemFabricacao(models.Model):
       nf.save()
       mnf.save()
       self.ativo = True
-
+    
     super(OrdemFabricacao, self).save(*args, **kwargs)           
       
 class EtiquetaRemessa(models.Model):
