@@ -43,4 +43,9 @@ class GeralTest(TestCase):
       descricao = "Produto 01"
     )
     produto.save()
-    self.assertEquals(produto.codigo, "1.1")
+    
+    list_produto = Produto.objects.all()
+    self.assertEquals(len(list_produto),1)
+    self.assertEquals(list_produto[0].grupo_produto.descricao,"Grupo Produto 01")
+    self.assertEquals(list_produto[0].codigo, "1.1")
+    self.assertEquals(list_produto[0].descricao,"Produto 01")
