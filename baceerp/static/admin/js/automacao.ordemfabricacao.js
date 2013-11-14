@@ -63,7 +63,7 @@ var OrdemFabricacao = {
   		jQuery(".field-valor input, #id_valor_total, .field-peso input").maskMoney({decimal:".",thousands:"", precision:2});
   	});
   	
-  	jQuery("#id_peso_bruto,#id_peso_liquido,#id_previsao,#id_perda").maskMoney({decimal:".",thousands:"", precision:2})
+  	jQuery("#id_peso_bruto,#id_peso_liquido,#id_previsao,#id_perda, .field-peso_1g input").maskMoney({decimal:".",thousands:"", precision:2})
   }
 }
 

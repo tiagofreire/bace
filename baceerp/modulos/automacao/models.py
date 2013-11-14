@@ -101,7 +101,7 @@ class OrdemFabricacao(models.Model):
       mnf = MaterialNotaFiscal.objects.get(id=self.material_nota_fiscal_id)
       mnf.peso = round((mnf.peso-self.peso_bruto),2)
       nf = NotaFiscal.objects.get(numero=self.nota_fiscal.numero)
-      nf.peso_total = nf.peso_total-mnf.peso
+      nf.peso_total = nf.peso_total-self.peso_bruto
       nf.save()
       mnf.save()
       self.ativo = True
@@ -119,10 +119,10 @@ class EtiquetaRemessa(models.Model):
   numero_etiqueta_remessa = models.CharField(u"Etiqueta",max_length=100,blank=False,null=False)  
   peso = models.FloatField(u"Peso",blank=False,null=False)
   tipo_etiqueta = models.CharField("Tipo de Etiqueta",max_length=100, choices=TIPO_ETIQUETA,blank=False,null=False)
-  previsao = models.ForeignKey(Previsao,blank=False,null=False)
+  previsao = models.FloatField(default=0,blank=True,null=True)
   data_inicio = models.DateField(u"Data de Início", max_length=100,blank=False,null=False)
   ordem_fabricacao = models.ForeignKey(OrdemFabricacao)
-  peso_1g = models.FloatField(u"Peso 1g",blank=False,null=False)
+  peso_1g = models.FloatField(u"Peso 1g",default=0,blank=True,null=True)
   produto = models.ForeignKey(Produto)
   ativo = models.BooleanField()
   
@@ -132,6 +132,7 @@ class EtiquetaRemessa(models.Model):
     print quantidade_etiqueta_of
     self.numero_etiqueta_remessa = str(self.ordem_fabricacao.numero_of)+str(self.ALFABETO[quantidade_etiqueta_of])    
     print self.numero_etiqueta_remessa
+    self.previsao = self.peso/self.peso_1g
     super(EtiquetaRemessa, self).save(*args, **kwargs) 
 
   class Meta:
@@ -150,21 +151,21 @@ class EtiquetaRetornoRaio(EtiquetaRetorno):
   peso_desengraxado = models.FloatField(u"Peso Desengraxado",blank=False,null=False)
   peso_1g = models.FloatField(u"Peso 1g", blank=False,null=False)
   peso_polido = models.FloatField(u"Peso Polido", blank=False,null=False)
-  quantidade = models.FloatField("Quantidade",max_length=100,blank=False,null=False)
-  data = models.DateField(u"Data", max_length=100,blank=False,null=False)
+  quantidade = models.IntegerField("Quantidade",blank=False,null=False)
+  data = models.DateField(u"Data", blank=False,null=False)
   responsavel = models.CharField(u"Responsável",max_length=100,blank=False,null=False)
   ativo = models.BooleanField()
     
 class EtiquetaRetornoNiple(EtiquetaRetorno):
-  peso_rosqueado = models.CharField(u"Peso Rosqueado", max_length=100,blank=False,null=False)
+  peso_rosqueado = models.FloatField(u"Peso Rosqueado", blank=False,null=False)
   peso_1g = models.FloatField(u"Peso 1g",blank=False,null=False)
-  data_peso_rosqueado = models.DateField(u"Data Rosqueado", max_length=100,blank=False,null=False)
+  data_peso_rosqueado = models.DateField(u"Data Rosqueado", blank=False,null=False)
   quantidade_peso_rosqueado = models.IntegerField("Quantidade Peso Rosqueado",blank=False,null=False)
   peso_niquelado = models.FloatField(u"Peso Niquelado",blank=False,null=False)
-  data_peso_niquelado = models.DateField(u"Data Niquelado", max_length=100,blank=False,null=False)
+  data_peso_niquelado = models.DateField(u"Data Niquelado", blank=False,null=False)
   quantidade_peso_niquelado = models.IntegerField("Quantidade Peso Niquelado",blank=False,null=False)
   peso_embalado = models.FloatField(u"Peso Embalado", blank=False,null=False)
-  data_peso_niquelado = models.DateField(u"Data Embalado", max_length=100,blank=False,null=False)
+  data_peso_niquelado = models.DateField(u"Data Embalado", blank=False,null=False)
   quantidade_peso_niquelado = models.IntegerField("Quantidade Peso Embalado",blank=False,null=False)
   responsavel = models.CharField(u"Responsável",max_length=100,blank=False,null=False)
   ativo = models.BooleanField()

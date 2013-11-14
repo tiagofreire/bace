@@ -92,13 +92,18 @@ class OrdemFabricacaoAdmin(admin.ModelAdmin):
   class Media:
     js = ('admin/js/automacao.ordemfabricacao.js',)
 
+  @csrf_protect_m
+  @transaction.commit_on_success
+  def add_view(self, request, form_url='', extra_context=None):
+    return HttpResponseRedirect("/automacao/ordemfabricacao/add/add_ordem_fabricacao")
+    #return admin.ModelAdmin.add_view(self, request, form_url=form_url, extra_context=extra_context)
   readonly_fields = ('material','numero_of',)
   search_fields = ('numero_of',)
   list_display = ('numero_of','material',)
   change_list_template = "admin/modulos/automacao/ordemfabricacao/list_ordem_fabricacao.html"    
   list_per_page = 25   
   inlines = [EtiquetaInline]
-  exclude = ('ativo',)  
+  exclude = ('ativo','material_nota_fiscal_id',)  
   
 
 #admin.site.register(MaterialNotaFiscal,MaterialNotaFiscalAdmin)
