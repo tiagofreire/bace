@@ -4,6 +4,6 @@ staticfiles
 .project
 .pydevproject
 .gitignore
-baceerp/modulos/automacao/migrations
-baceerp/modulos/geral/migrations
-baceerp/modulos/estoque/migrations
+/baceerp/modulos/automacao/migrations
+/baceerp/modulos/geral/migrations
+/baceerp/modulos/estoque/migrations

@@ -39,7 +39,7 @@ INSTALLED_APPS = (
 	# instalados
 	'django.contrib.admin',
 	'bootstrap_admin',
-	#'south',
+	'south',
 	'baceerp.modulos.estoque',
 	'baceerp.modulos.geral',
 	'baceerp.modulos.automacao',
