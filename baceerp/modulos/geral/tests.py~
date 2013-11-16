@@ -4,9 +4,8 @@ from baceerp.modulos.geral.models import TipoMaterial, Material,GrupoProduto,Pro
 
 class GeralTest(TestCase):
   def test_cria_tipo_material(self):
-    tipo_material = TipoMaterial(
-      descricao = "Material 01"
-    )
+    tipo_material = TipoMaterial()
+    tipo_material.descricao = "Material 01"
     tipo_material.save()
     
     list_tipo_material = TipoMaterial.objects.all()

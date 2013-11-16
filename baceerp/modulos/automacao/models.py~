@@ -92,7 +92,7 @@ class OrdemFabricacao(models.Model):
       nf.save()
       mnf.save()
       self.ativo = True
-    
+
     super(OrdemFabricacao, self).save(*args, **kwargs)           
       
 class EtiquetaRemessa(models.Model):

@@ -1,6 +1,9 @@
 venv
 *.pyc
 staticfiles
-/.project
-/.pydevproject
-/.gitignore
+.project
+.pydevproject
+.gitignore
+baceerp/modulos/automacao/migrations
+baceerp/modulos/geral/migrations
+baceerp/modulos/estoque/migrations

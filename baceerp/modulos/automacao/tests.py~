@@ -80,7 +80,7 @@ class AutomacaoTest(TestCase):
 
     material_nota_fiscal = MaterialNotaFiscal.objects.get(id=material_nota_fiscal_3.id)  
     nota_fiscal = NotaFiscal.objects.get(id=nota_fiscal.id)
-    print material_nota_fiscal.volume
+  
     for x in range(1,int(material_nota_fiscal.volume)+1):
       of = OrdemFabricacao(
         nota_fiscal=NotaFiscal.objects.get(id=nota_fiscal.id),
@@ -93,8 +93,7 @@ class AutomacaoTest(TestCase):
     material_nota_fiscal.volume=0
     material_nota_fiscal.status = "PARA_PRODUCAO"
     material_nota_fiscal.ativo=True
-    print material_nota_fiscal.volume
     material_nota_fiscal.save()    
-    
+      
       
     
