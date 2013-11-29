@@ -2,7 +2,6 @@ body{
     padding-bottom: 40px;
     padding-top: 60px;
     position: relative;
-    text-transform:capitalize !important;
 }
 @media (max-width:1024px){
     #content h1 {

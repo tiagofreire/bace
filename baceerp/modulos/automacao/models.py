@@ -1,6 +1,6 @@
 #-*- coding: utf-8 -*-
 from django.db import models
-from baceerp.modulos.geral.models import Material, Produto, Operador, Previsao
+from baceerp.modulos.geral.models import Material, GrupoProduto, Produto, Operador, TipoPrevisao
 from django.db.models.aggregates import Max
 from django.utils.numberformat import format
 from django.template.defaultfilters import default
@@ -72,8 +72,8 @@ class OrdemFabricacao(models.Model):
   data_inicial = models.DateField(u"Data Inicial", max_length=100,blank=True,null=True)
   data_final = models.DateField(u"Data Final", max_length=100,blank=True,null=True)
   peso_bruto = models.FloatField("Peso Bruto",blank=True,null=True)
-  peso_liquido = models.FloatField(u"Peso Líquido",blank=True,null=True)
-  previsao = models.ForeignKey(Previsao,blank=True,null=True)
+  peso_liquido = models.FloatField(u"Peso Líquido",default=0,blank=True,null=True)
+  previsao = models.ForeignKey(TipoPrevisao,blank=True,null=True)
   perda = models.FloatField(u"Perda",blank=True,null=True)
   ativo = models.BooleanField(default=False)
   material_nota_fiscal_id = models.IntegerField(blank=True,null=True)
@@ -84,9 +84,11 @@ class OrdemFabricacao(models.Model):
     import sys      
     if self.id != None and self.ativo is False:
       mnf = MaterialNotaFiscal.objects.get(id=self.material.id)
-      mnf.peso = round((mnf.peso-self.peso_bruto),2)
+      if mnf.peso != None and self.peso_bruto != None:
+        mnf.peso = round((mnf.peso-self.peso_bruto),2)
       nf = NotaFiscal.objects.get(numero=self.nota_fiscal.numero)
-      nf.peso_total = nf.peso_total-self.peso_bruto
+      if nf.peso_total != None and self.peso_bruto != None:
+        nf.peso_total = nf.peso_total-self.peso_bruto
       nf.save()
       mnf.save()
       self.ativo = True
@@ -102,23 +104,30 @@ class EtiquetaRemessa(models.Model):
   ALFABETO = ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z']
    
   numero_etiqueta_remessa = models.CharField(u"Etiqueta",max_length=100,blank=False,null=False)  
-  peso = models.FloatField(u"Peso",blank=False,null=False)
+  peso = models.FloatField(u"Peso",default=0,blank=False,null=False)
   tipo_etiqueta = models.CharField("Tipo de Etiqueta",max_length=100, choices=TIPO_ETIQUETA,blank=False,null=False)
   previsao = models.FloatField(default=0,blank=True,null=True)
+  tipo_previsao = models.ForeignKey(TipoPrevisao,blank=True,null=True)
   data_inicio = models.DateField(u"Data de Início", max_length=100,blank=False,null=False)
   ordem_fabricacao = models.ForeignKey(OrdemFabricacao)
   peso_1g = models.FloatField(u"Peso 1g",default=0,blank=True,null=True)
   produto = models.ForeignKey(Produto)
   ativo = models.BooleanField(default=False)
+  baixa = models.BooleanField(u"Dar baixa",default=False)
   
   vol = 1
   def save(self, *args, **kwargs):
+    of = OrdemFabricacao.objects.get(id=self.ordem_fabricacao.id)
     quantidade_etiqueta_of = EtiquetaRemessa.objects.filter(ordem_fabricacao=self.ordem_fabricacao).count()
     print quantidade_etiqueta_of
     self.numero_etiqueta_remessa = str(self.ordem_fabricacao.numero_of)+str(self.ALFABETO[quantidade_etiqueta_of])    
     print self.numero_etiqueta_remessa
-    self.previsao = self.peso/self.peso_1g
+    self.previsao = round(self.peso/self.peso_1g,2)
     super(EtiquetaRemessa, self).save(*args, **kwargs) 
+    of.peso_liquido = 0
+    for etiqueta in EtiquetaRemessa.objects.filter(ordem_fabricacao=self.ordem_fabricacao):
+      of.peso_liquido = of.peso_liquido + etiqueta.peso
+      of.save()
 
   class Meta:
     verbose_name= "Etiqueta"
@@ -130,8 +139,7 @@ class EtiquetaRemessa(models.Model):
     
 class EtiquetaRetorno(models.Model):
   etiqueta_remessa = models.ForeignKey(EtiquetaRemessa)
-    
-    
+      
 class EtiquetaRetornoRaio(EtiquetaRetorno):
   peso_desengraxado = models.FloatField(u"Peso Desengraxado",blank=False,null=False)
   peso_1g = models.FloatField(u"Peso 1g", blank=False,null=False)

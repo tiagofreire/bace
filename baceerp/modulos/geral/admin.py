@@ -2,7 +2,7 @@
 from django.contrib import admin
 from django.conf import settings 
 from django.contrib.admin.options import ModelAdmin,TabularInline
-from baceerp.modulos.geral.models import TipoMaterial, Produto, Operador , Material, Setor, GrupoProduto, Previsao
+from baceerp.modulos.geral.models import TipoMaterial, Produto, Operador , Material, Setor, GrupoProduto, TipoPrevisao
 from django import forms
 from django.forms import ModelForm, widgets
 import os
@@ -38,5 +38,5 @@ admin.site.register(Material,MaterialAdmin)
 admin.site.register(Setor,SetorAdmin)
 admin.site.register(Operador,OperadorAdmin)
 admin.site.register(GrupoProduto)
-admin.site.register(Previsao)
+admin.site.register(TipoPrevisao)
 admin.site.register(Produto,ProdutoAdmin)

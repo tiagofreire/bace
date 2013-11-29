@@ -2,7 +2,7 @@
 from django.test import TestCase
 from django.utils import timezone
 from baceerp.modulos.geral.models import TipoMaterial, Material,GrupoProduto,Produto
-from baceerp.modulos.automacao.models import NotaFiscal, MaterialNotaFiscal,OrdemFabricacao
+from baceerp.modulos.automacao.models import NotaFiscal, MaterialNotaFiscal,OrdemFabricacao,EtiquetaRemessa
 
 class AutomacaoTest(TestCase):
 
@@ -83,7 +83,17 @@ class AutomacaoTest(TestCase):
         ativo = False,
       )
     return MaterialNotaFiscal.objects.all()
-  
+                                                 
+  def gera_produto(self):
+    grupo_produto = GrupoProduto.objects.create(
+      codigo = "1",
+      descricao =  "Grupo Produto 1"
+    )                              
+    produto = Produto.objects.create(
+      grupo_produto = grupo_produto,
+      codigo = "0",
+      descricao = "Prpduto 01"
+    )
   def test_gera_nota_fiscal(self):
   
     lista_material_nota_fiscal = self.gera_lista_material_nota_fiscal()
@@ -100,7 +110,6 @@ class AutomacaoTest(TestCase):
         ex.: 500.0 + 500.0 + 1000.0 = 2000.0
     """
     self.assertEquals(nota_fiscal.peso_total,2000.0)     
-    print "##########################" 
     
   
   def test_ordem_fabricacao(self):
@@ -121,9 +130,47 @@ class AutomacaoTest(TestCase):
     self.assertEquals(nota_fiscal.peso_total,(nota_fiscal.peso_total_inicial-of.peso_bruto))
     self.assertEquals(material_nota_fiscal.peso_inicial,1000.0)
     self.assertEquals(material_nota_fiscal.peso,(material_nota_fiscal.peso_inicial-of.peso_bruto))
-    self.assertEquals(material_nota_fiscal.status,"PARA_PRODUCAO")    
-    print material_nota_fiscal.peso
-    print material_nota_fiscal.peso_inicial    
-    print "##########################"
-    print nota_fiscal.peso_total
-    print nota_fiscal.peso_total_inicial
+    self.assertEquals(material_nota_fiscal.status,"PARA_PRODUCAO")  
+      
+  def test_gera_etiqueta(self):
+    
+    lista_material_nota_fiscal = self.gera_lista_material_nota_fiscal()
+    nota_fiscal = NotaFiscal.objects.get(numero=self.NUMERO_NOTA_FISCAL)
+    
+    self.gera_ordem_fabricacao(nota_fiscal,lista_material_nota_fiscal[2])
+    self.gera_produto()
+    
+    produto = Produto.objects.all()
+    
+    list_of = OrdemFabricacao.objects.all()
+    of = list_of[0]
+    of.peso_bruto = 250.0
+    of.save()   
+         
+    etiqueta1 = EtiquetaRemessa.objects.create(
+      numero_etiqueta_remessa = "0",
+      peso = 123.0,
+      tipo_etiqueta = "0",
+      previsao = 0,
+      data_inicio = timezone.now(),
+      ordem_fabricacao = of,
+      peso_1g = 21,
+      produto = produto[0]
+    )
+    etiqueta2 = EtiquetaRemessa.objects.create(
+      numero_etiqueta_remessa = "0",
+      peso = 123.0,
+      tipo_etiqueta = "0",
+      previsao = 0,
+      data_inicio = timezone.now(),
+      ordem_fabricacao = of,
+      peso_1g = 21,
+      produto = produto[0]
+    )                        
+    of = OrdemFabricacao.objects.get(pk=etiqueta1.ordem_fabricacao.id)
+    print 
+    print "------"
+    self.assertEquals(etiqueta1.previsao, 5.86)
+    self.assertEquals(of.peso_liquido, 246.0)
+    
+

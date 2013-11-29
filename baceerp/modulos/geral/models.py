@@ -64,7 +64,7 @@ class GrupoProduto(models.Model):
   descricao = models.CharField(u"Descrição",max_length=100,null=False,blank=False)
                                                                    
   def __unicode__(self):
-    return self.codigo     
+    return self.descricao     
 
 class Produto(models.Model):
   
@@ -87,7 +87,7 @@ class Produto(models.Model):
     self.codigo = str(self.grupo_produto.id)+"."+produto_id
     super(Produto, self).save(*args, **kwargs)
 
-class Previsao(models.Model):
+class TipoPrevisao(models.Model):
   class Meta:
     verbose_name = "Previsão"
   descricao = models.CharField(u"Descrição",max_length=100,null=False,blank=False)

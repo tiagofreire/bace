@@ -55,11 +55,11 @@ class EtiquetaAdmin(admin.ModelAdmin):
     js = ('admin/js/automacao.etiqueta.js',)
 
   fieldsets = [
-        ('Remessa', {'fields': ['tipo_etiqueta','numero_etiqueta_remessa','produto','ordem_fabricacao','peso','previsao','data_inicio','peso_1g']}),
+        ('Remessa', {'fields': ['tipo_etiqueta','numero_etiqueta_remessa','produto','ordem_fabricacao','peso','previsao','tipo_previsao','data_inicio','peso_1g','baixa',]}),
     ]
-  list_filter = ('numero_etiqueta_remessa','tipo_etiqueta') 
+  list_filter = ('numero_etiqueta_remessa','tipo_etiqueta','data_inicio','produto__grupo_produto','produto',) 
   list_display = ('numero_etiqueta_remessa','ordem_fabricacao','tipo_etiqueta')
-  search_fields = ('numero_etiqueta_remessa','ordem_fabricacao__numero_of','tipo_etiqueta')
+  search_fields = ('numero_etiqueta_remessa','ordem_fabricacao__numero_of','tipo_etiqueta',)
   
   
   
@@ -97,6 +97,8 @@ class OrdemFabricacaoAdmin(admin.ModelAdmin):
   def add_view(self, request, form_url='', extra_context=None):
     return HttpResponseRedirect("/automacao/ordemfabricacao/add/add_ordem_fabricacao")
     #return admin.ModelAdmin.add_view(self, request, form_url=form_url, extra_context=extra_context)
+    
+  list_filter = ('data_inicial','produto',) 
   readonly_fields = ('material','numero_of',)
   search_fields = ('numero_of',)
   list_display = ('numero_of','material',)
