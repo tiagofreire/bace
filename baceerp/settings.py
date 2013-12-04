@@ -84,8 +84,8 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.6/howto/static-files/
-
-STATIC_URL = 'http://localhost:8000/static/'    
+import socket
+STATIC_URL = 'http://'+socket.gethostbyname(socket.gethostname())+'/static/'    
 MEDIA_ROOT = os.path.join(os.path.dirname(__file__), 'static')
 TEMPLATE_DIRS = (
   os.path.dirname(__file__) + '/templates/',
